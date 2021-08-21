@@ -21,11 +21,6 @@ const UsuarioSchema = mongoose.Schema({
     required: true,
     trim: true,
   },
-  google: {
-    type: Boolean,
-    required: true,
-    default: false
-  },
   foto: {
     type: String,
     trim: true,

@@ -1,5 +1,6 @@
 const Usuario=require('../models/Usuario');
 const bcryptjs = require('bcryptjs');
+const {generarJWT} =require('../helpers');
 
 
 nuevoUsuario=async(req,res,next)=>{
@@ -7,18 +8,26 @@ nuevoUsuario=async(req,res,next)=>{
     const {nombre,apellido,correo,password}=req.body;
     
     try {
+
+        const existeUsuario=await Usuario.findOne({correo});
+        if(existeUsuario){
+            return res.status(400).json({
+                msg: 'El usuario ya existe'
+            });
+        }
+
         const usuario=new Usuario({nombre,apellido,correo,password});
         
         // Encriptar la contraseña
-        const salt = bcryptjs.genSaltSync();
+        const salt = bcryptjs.genSaltSync(10);
         usuario.password = bcryptjs.hashSync( password, salt );
 
         await usuario.save();
 
-        // Generar el JWT
-        const token = await generarJWT( usuario.id );
 
-        console.log(usuario,token);
+        // Generar el JWT
+        const token = await generarJWT( usuario );
+
 
         res.json({
             usuario,
@@ -26,11 +35,90 @@ nuevoUsuario=async(req,res,next)=>{
         });
 
     } catch (error) {
-        res.json(error);
+        res.json({msg:"No se pudo crear nuevo usuario"});
         next();
     }
 }
 
+logIn=async(req,res,next)=>{
+    const {correo,password}=req.body;
+
+    try {
+
+        //Verificamos si existe usuario
+
+        const usuario=await Usuario.findOne({correo});
+
+        if(!usuario){
+            return res.status(400).json({
+                msg: 'Correo / Password no son correctos - correo'
+            });
+        }
+
+        //Verificamos si el password es igual
+        const passwordCorrecto=await bcryptjs.compare(password,usuario.password);
+
+        if(!passwordCorrecto){
+            return res.status(400).json({
+                msg: 'Correo / Password no son correctos - password'
+            });
+        }
+
+        // Generar el JWT
+        const token = await generarJWT( usuario );
+
+
+        res.json({
+            usuario,
+            token
+        });
+
+    } catch (error) {
+        res.json({msg:"No se pudo iniciar sesión"});
+        next();
+    }
+}
+
+actualizarUsuario=async(req,res,next)=>{
+    const {correo,password}=req.body;
+
+
+    try {
+
+        const existeUsuario=await Usuario.findOne({correo});
+
+        //Verificar si el usuario existe
+        if(!existeUsuario){
+            return res.status(400).json({
+                msg: 'El usuario no existe'
+            });
+        }
+
+        //verificar si la contraseña se cambiò para hashearla
+        const passwordCorrecto=await bcryptjs.compare(password,existeUsuario.password);
+        if(passwordCorrecto){
+            req.body.password=existeUsuario.password;
+        }else{
+            // Encriptar la contraseña nueva
+            const salt = bcryptjs.genSaltSync(10);
+            req.body.password = bcryptjs.hashSync( password, salt );
+        }
+        
+
+        const usuario=await Usuario.findOneAndUpdate({_id:req.params.id},req.body,{
+            new:true
+        });
+
+        res.json(usuario);
+    } catch (error) {
+        res.json({msg:"No se pudo actualizar"});
+        next();
+    }
+}
+
+
 module.exports={
-    nuevoUsuario
+    nuevoUsuario,
+    logIn,
+    actualizarUsuario
 }

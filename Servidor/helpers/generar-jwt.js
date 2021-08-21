@@ -1,26 +1,25 @@
 const jwt = require('jsonwebtoken');
+require("dotenv").config({ path: "variables.env" });
 
 
 
-const generarJWT = ( uid = '' ) => {
+const generarJWT = ( usuario ) => {
 
-    return new Promise( (resolve, reject) => {
+    const { id, correo, nombre, apellido } = usuario;
+    
 
-        const payload = { uid };
-
-        jwt.sign( payload, process.env.SECRETORPRIVATEKEY, {
-            expiresIn: '7d'
-        }, ( err, token ) => {
-
-            if ( err ) {
-                console.log(err);
-                reject( 'No se pudo generar el token' )
-            } else {
-                resolve( token );
-            }
-        })
-
-    })
+    return jwt.sign(
+        {
+          id,
+          correo,
+          nombre,
+          apellido,
+        },
+        process.env.SECRETORPRIVATEKEY,
+        {
+          expiresIn:'7d',
+        }
+      );
 }
 
 
