@@ -1,9 +1,9 @@
 const express=require('express');
 const {check}=require('express-validator');
 const router=express.Router();
-const {nuevoUsuario,logIn,actualizarUsuario}=require('../controllers/usuarioControllers');
+const {nuevoUsuario,logIn,actualizarUsuario,obtenerUsuario}=require('../controllers/usuarioControllers');
 
-const {validarCampos} = require('../middlewares');
+const {validarCampos,validarJWT} = require('../middlewares');
 
 
 module.exports=()=>{
@@ -31,7 +31,11 @@ module.exports=()=>{
         check('password','La contraseña es obligatoria').not().isEmpty(),
         check('password',"La contraseña debe contener por lo menos 6 caracteres").isLength({min:6}),
         validarCampos
-    ],actualizarUsuario)
+    ],actualizarUsuario);
+
+    router.get('/',[
+        validarJWT
+    ],obtenerUsuario)
 
 
     return router;

@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 
-const UsuarioSchema = mongoose.Schema({
+const { Schema } = mongoose;
+mongoose.Promise = global.Promise;
+
+const UsuarioSchema = new Schema({
   nombre: {
     type: String,
     required: true,
@@ -32,4 +35,4 @@ const UsuarioSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Usuario", UsuarioSchema);
+module.exports = mongoose.models.Usuario||mongoose.model("Usuario", UsuarioSchema);

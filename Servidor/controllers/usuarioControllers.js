@@ -109,16 +109,20 @@ actualizarUsuario=async(req,res,next)=>{
             new:true
         });
 
-        res.json(usuario);
+        res.json({usuario});
     } catch (error) {
         res.json({msg:"No se pudo actualizar"});
         next();
     }
 }
 
+obtenerUsuario=async(req,res,next)=>{
+    res.json({usuario:req.usuario});
+}
 
 module.exports={
     nuevoUsuario,
     logIn,
-    actualizarUsuario
+    actualizarUsuario,
+    obtenerUsuario
 }
