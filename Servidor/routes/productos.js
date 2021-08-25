@@ -12,7 +12,7 @@ const {
 } = require("../controllers/productoControllers");
 const router = express.Router();
 
-const { validarCampos, validarJWT } = require("../middlewares");
+const { validarCampos, validarJWT,validarArchivoSubir } = require("../middlewares");
 
 module.exports = () => {
   router.post(
@@ -26,6 +26,7 @@ module.exports = () => {
       check("precio", "El precio es obligatorio").notEmpty(),
       check("precio", "El precio debe de tener formato correcto").isDecimal(),
       validarCampos,
+      validarArchivoSubir,
     ],
     nuevoProducto
   );

@@ -25,6 +25,7 @@ module.exports=()=>{
     ],logIn);
 
     router.put('/usuarios/:id',[
+        validarJWT,
         check('nombre','El nombre es obligatorio').not().isEmpty(),
         check('apellido','El apellido es obligatorio').not().isEmpty(),
         check('correo','El correo es obligatorio').isEmail(),

@@ -1,6 +1,11 @@
 const Producto = require('../models/Producto');
 const Usuario = require('../models/Usuario');
 
+require("dotenv").config({ path: "variables.env" });
+
+const cloudinary =require('cloudinary').v2;
+cloudinary.config(process.env.CLOUDINARY_URL);
+
 nuevoProducto=async(req,res,next)=>{
     const {creador}=req.body;
 
@@ -14,6 +19,12 @@ nuevoProducto=async(req,res,next)=>{
         }
 
         const producto = new Producto(req.body);
+
+        if(req.files.archivo){
+            const { tempFilePath } = req.files.archivo
+            const { secure_url } = await cloudinary.uploader.upload( tempFilePath );
+            producto.foto = secure_url;
+        }
 
         await producto.save();
 
@@ -45,6 +56,24 @@ actualizarProducto=async(req,res,next)=>{
             })
         };
 
+        //Verificar si hay imagen que cambiar
+        if(!req.files){
+            req.body.foto=existeProducto.foto;
+        }else{
+
+            //Limpiar Imagen previa
+            const nombreArr = existeProducto.foto.split('/');
+            const nombre    = nombreArr[ nombreArr.length - 1 ];
+            const [ public_id ] = nombre.split('.');
+            await cloudinary.uploader.destroy( public_id );
+
+            //subir nueva imagen
+            const { tempFilePath } = req.files.archivo
+            const { secure_url } = await cloudinary.uploader.upload( tempFilePath );
+            req.body.foto = secure_url;
+
+        }
+
         //Actualizar producto
         const producto=await Producto.findOneAndUpdate({_id:req.params.id},req.body,{
             new:true
@@ -53,6 +82,7 @@ actualizarProducto=async(req,res,next)=>{
         res.json({producto});
 
     } catch (error) {
+        console.log(error);
         res.json({msg:"No se pudo actualizar"});
         next();
     }
@@ -71,12 +101,18 @@ eliminarProducto=async(req,res,next)=>{
             })
         };
 
-        //Verificar si el usuario que edita es el que creó el producto
+        //Verificar si el usuario que elimina es el que creó el producto
         if(id.toString()!==existeProducto.creador.toString()){
             return res.status(401).json({
                 msg:'No posee permisos'
             })
         };
+
+        //Eliminar Imagen
+        const nombreArr = existeProducto.foto.split('/');
+        const nombre    = nombreArr[ nombreArr.length - 1 ];
+        const [ public_id ] = nombre.split('.');
+        await cloudinary.uploader.destroy( public_id );
 
         //Eliminar Producto
         await Producto.findOneAndDelete({

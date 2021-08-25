@@ -1,12 +1,16 @@
 const Usuario=require('../models/Usuario');
 const bcryptjs = require('bcryptjs');
 const {generarJWT} =require('../helpers');
+require("dotenv").config({ path: "variables.env" });
+
+const cloudinary =require('cloudinary').v2;
+cloudinary.config(process.env.CLOUDINARY_URL);
 
 
 nuevoUsuario=async(req,res,next)=>{
 
     const {nombre,apellido,correo,password}=req.body;
-    
+    // console.log(req.body);
     try {
 
         const existeUsuario=await Usuario.findOne({correo});
@@ -15,15 +19,12 @@ nuevoUsuario=async(req,res,next)=>{
                 msg: 'El usuario ya existe'
             });
         }
-
         const usuario=new Usuario({nombre,apellido,correo,password});
-        
         // Encriptar la contraseña
         const salt = bcryptjs.genSaltSync(10);
         usuario.password = bcryptjs.hashSync( password, salt );
 
         await usuario.save();
-
 
         // Generar el JWT
         const token = await generarJWT( usuario );
@@ -35,6 +36,7 @@ nuevoUsuario=async(req,res,next)=>{
         });
 
     } catch (error) {
+        console.log(error);
         res.json({msg:"No se pudo crear nuevo usuario"});
         next();
     }
@@ -92,6 +94,13 @@ actualizarUsuario=async(req,res,next)=>{
             return res.status(400).json({
                 msg: 'El usuario no existe'
             });
+        } 
+
+        //Verificar si el usuario que edita es el usuario que se edita
+        if(req.usuario.id.toString()!==existeUsuario.id.toString()){
+            return res.status(401).json({
+                msg: 'No posee los permisos'
+            });
         }
 
         //verificar si la contraseña se cambiò para hashearla
@@ -102,6 +111,26 @@ actualizarUsuario=async(req,res,next)=>{
             // Encriptar la contraseña nueva
             const salt = bcryptjs.genSaltSync(10);
             req.body.password = bcryptjs.hashSync( password, salt );
+        }
+
+        //Verificar si hay imagen que cambiar
+        if(!req.files){
+            req.body.foto=existeUsuario.foto;
+        }else{
+
+           if(existeUsuario.foto){
+                //Limpiar Imagen previa
+                const nombreArr = existeUsuario.foto.split('/');
+                const nombre    = nombreArr[ nombreArr.length - 1 ];
+                const [ public_id ] = nombre.split('.');
+                await cloudinary.uploader.destroy( public_id );
+           }
+
+            //subir nueva imagen
+            const { tempFilePath } = req.files.archivo
+            const { secure_url } = await cloudinary.uploader.upload( tempFilePath );
+            req.body.foto = secure_url;
+
         }
         
 

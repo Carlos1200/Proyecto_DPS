@@ -3,6 +3,7 @@ const conectarDB=require('./db/db');
 const auth=require('./routes/auth');
 const productos=require('./routes/productos');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 
 //crear servidor
 const app=express();
@@ -17,6 +18,13 @@ app.use(cors());
 // habilitar el body-parser
 app.use(express.urlencoded({extended: true})); 
 app.use(express.json());
+
+//Habilitar la subida de archivos
+app.use(fileUpload({
+    useTempFiles : true,
+    tempFileDir : '/tmp/',
+    createParentPath: true
+}))
 
 //Habilitar routes
 app.use('/api/auth/',auth());
