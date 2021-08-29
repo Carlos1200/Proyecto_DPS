@@ -1,6 +1,7 @@
 const Producto=require('../models/Producto');
 const Pedido=require('../models/Pedidos');
 
+
 nuevoPedido=async(req,res,next)=>{
     const {creador,productos,total}=req.body;
     try {
@@ -122,9 +123,15 @@ eliminarPedido=async(req,res,next)=>{
 
 
 obtenerPedidos=async(req,res,next)=>{
+
+    const {id}=req.usuario;
+    const idComprador = require('mongoose').Types.ObjectId(id);
     try {
 
         const pedidos=await Pedido.aggregate([
+            {
+                $match:{comprador:idComprador}
+            },
             {
                 $lookup:{
                     from:'productos',
@@ -135,9 +142,9 @@ obtenerPedidos=async(req,res,next)=>{
             },
             {
                 $project:{idProducto:0}
-            }
+            },
         ]);
-
+        console.log(pedidos);
         res.json({pedidos});
     } catch (error) {
         console.log(error);
