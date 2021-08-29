@@ -2,6 +2,7 @@ const express=require('express');
 const conectarDB=require('./db/db');
 const auth=require('./routes/auth');
 const productos=require('./routes/productos');
+const pedidos=require('./routes/pedidos');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
 
@@ -29,6 +30,7 @@ app.use(fileUpload({
 //Habilitar routes
 app.use('/api/auth/',auth());
 app.use('/api/producto/',productos());
+app.use('/api/pedidos/',pedidos());
  
 
 // puerto y arrancar el servidor

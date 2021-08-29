@@ -3,20 +3,6 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 mongoose.Promise = global.Promise;
 
-const ComentariosSchema = new Schema({
-    usuario:{
-        type:mongoose.Schema.Types.ObjectId,
-        required:true,
-        ref:"Usuario"
-    },
-    comentario:{
-        type:String,
-        required:true,
-        trim:true
-    }
-    
-})
-
 const ProductoSchema = new Schema({
   nombre: {
     type: String,
@@ -38,16 +24,15 @@ const ProductoSchema = new Schema({
     required:true,
     trim:true
   },
-  marca:{
-    type:String,
-    required:true,
-    trim:true
-  },
-  comentarios:[ComentariosSchema],
   foto: {
     type: String,
     trim: true,
     default: undefined
+  },
+  existencia:{
+    type:Number,
+    trim:true,
+    trim:true
   },
   creador:{
     type:mongoose.Schema.Types.ObjectId,

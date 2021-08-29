@@ -13,7 +13,7 @@ const UsuarioSchema = new Schema({
     type: String,
     trim: true,
   },
-  correo: {
+  correo: { 
     type: String,
     required: true,
     trim: true,

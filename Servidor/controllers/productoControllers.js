@@ -180,16 +180,6 @@ obtenerProductosNombre=async(req,res,next)=>{
     }
 }
 
-obtenerProductosMarca=async(req,res,next)=>{
-    const {marca}=req.params;
-    try {
-        const productos=await Producto.find({marca:{$regex:marca,$options:'i'}});
-        res.json({productos});
-    } catch (error) {
-        
-    }
-}
-
 module.exports={
     nuevoProducto,
     actualizarProducto,
@@ -197,6 +187,5 @@ module.exports={
     obtenerProductos,
     obtenerProducto,
     obtenerProductoYear,
-    obtenerProductosNombre,
-    obtenerProductosMarca
+    obtenerProductosNombre
 }
