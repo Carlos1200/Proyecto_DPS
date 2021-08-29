@@ -60,3 +60,5 @@ buck-out/
 
 
 package-lock.json
+yarn.lock
+variables.env
