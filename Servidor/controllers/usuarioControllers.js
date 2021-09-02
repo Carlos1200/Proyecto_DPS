@@ -84,7 +84,6 @@ logIn=async(req,res,next)=>{
 actualizarUsuario=async(req,res,next)=>{
     const {correo,password}=req.body;
 
-
     try {
 
         const existeUsuario=await Usuario.findOne({correo});
@@ -133,13 +132,13 @@ actualizarUsuario=async(req,res,next)=>{
 
         }
         
-
-        const usuario=await Usuario.findOneAndUpdate({_id:req.params.id},req.body,{
+        const usuario=await Usuario.findOneAndUpdate({_id:existeUsuario._id},req.body,{
             new:true
         });
 
         res.json({usuario});
     } catch (error) {
+        console.log(error);
         res.json({msg:"No se pudo actualizar"});
         next();
     }
