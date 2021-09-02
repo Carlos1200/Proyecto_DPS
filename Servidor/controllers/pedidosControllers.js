@@ -143,7 +143,6 @@ obtenerPedidos=async(req,res,next)=>{
                 $project:{idProducto:0}
             },
         ]);
-        console.log(pedidos);
         res.json({pedidos});
     } catch (error) {
         console.log(error);
