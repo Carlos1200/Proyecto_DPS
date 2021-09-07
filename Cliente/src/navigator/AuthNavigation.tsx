@@ -12,7 +12,7 @@ export const AuthNavigation = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name='Drawer' component={DrawerNavigation} />
+      {/* <Stack.Screen name='Drawer' component={DrawerNavigation} /> */}
       <Stack.Screen name='Login' component={LoginScreen} />
       <Stack.Screen name='CrearCuenta' component={NuevoUsuarioScreen} />
     </Stack.Navigator>
