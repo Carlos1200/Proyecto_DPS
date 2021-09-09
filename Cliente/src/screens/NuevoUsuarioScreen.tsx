@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   Text,
   View,
@@ -6,14 +6,17 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { ThemeContext } from "../context/theme/ThemeContext";
-import { Header } from "../components/Header";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { StackScreenProps } from "@react-navigation/stack";
+import { ThemeContext } from "../context/theme/ThemeContext";
+import { Header } from "../components/Header";
 import { Input } from "../components/Input";
 import { Btn } from "../components/Btn";
-import { StackScreenProps } from "@react-navigation/stack";
+import Api from "../api/index";
+import { UsuarioResponse } from "../interfaces";
+import { AuthContext } from "../context/auth/AuthContext";
 
 const { width } = Dimensions.get("window");
 interface Props extends StackScreenProps<any, any> {}
@@ -44,6 +47,7 @@ export const NuevoUsuarioScreen = ({ navigation }: Props) => {
       colors: { text, primary, background },
     },
   } = useContext(ThemeContext);
+  const { login } = useContext(AuthContext);
 
   const {
     control,
@@ -53,11 +57,40 @@ export const NuevoUsuarioScreen = ({ navigation }: Props) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = () => {};
+  const [error, setError] = useState(null);
+
+  const onSubmit = async ({ nombre, apellido, correo, password }: NewUser) => {
+    try {
+      const { data } = await Api.post<UsuarioResponse>("/auth/usuarios", {
+        nombre,
+        apellido,
+        correo,
+        password,
+      });
+
+      login(data);
+    } catch (error) {
+      setError(error.response.data.msg);
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
+    }
+  };
   return (
     <View style={{ flex: 1, backgroundColor: primary }}>
       <Header title='Nuevo Usuario' />
       <View style={[styles.contenedorForm, { backgroundColor: background }]}>
+        {error && (
+          <Text
+            style={{
+              textAlign: "center",
+              color: "red",
+              fontSize: 18,
+              marginTop: 10,
+            }}>
+            {error}
+          </Text>
+        )}
         <View style={styles.form}>
           <View style={{ marginTop: 30 }}>
             <Text style={[styles.label, { color: text }]}>Nombre</Text>

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Text,
@@ -15,6 +15,8 @@ import { ThemeContext } from "../context/theme/ThemeContext";
 import { Input } from "../components/Input";
 import { Btn } from "../components/Btn";
 import { StackScreenProps } from "@react-navigation/stack";
+import Api from "../api/index";
+import { AuthContext } from "../context/auth/AuthContext";
 
 const { width } = Dimensions.get("window");
 
@@ -40,6 +42,10 @@ export const LoginScreen = ({ navigation }: Props) => {
       colors: { text, primary, background },
     },
   } = useContext(ThemeContext);
+
+  const { login } = useContext(AuthContext);
+  const [error, setError] = useState(null);
+
   const {
     control,
     handleSubmit,
@@ -48,8 +54,20 @@ export const LoginScreen = ({ navigation }: Props) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = ({ correo, password }: IFormInputs) =>
-    console.log(correo, password);
+  const onSubmit = async ({ correo, password }: IFormInputs) => {
+    try {
+      const { data } = await Api.post("/auth/login", {
+        correo,
+        password,
+      });
+      login(data);
+    } catch (error) {
+      setError(error.response.data.msg);
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
+    }
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: primary }}>
@@ -64,6 +82,17 @@ export const LoginScreen = ({ navigation }: Props) => {
         />
       </View>
       <View style={[styles.contenedorForm, { backgroundColor: background }]}>
+        {error && (
+          <Text
+            style={{
+              textAlign: "center",
+              color: "red",
+              fontSize: 18,
+              marginTop: 10,
+            }}>
+            {error}
+          </Text>
+        )}
         <Header title='Login' />
         <View style={styles.form}>
           <View style={{ marginTop: 30 }}>
