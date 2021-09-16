@@ -25,6 +25,7 @@ export const Input = ({ control, name, style }: Props) => {
           onChangeText={onChange}
           value={value}
           secureTextEntry={name === "password" ? true : false}
+          keyboardType={name === "correo" ? "email-address" : "default"}
         />
       )}
       name={name}

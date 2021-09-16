@@ -8,6 +8,7 @@ interface AuthContextProps {
   auth: AuthState;
   login: ({ usuario, token }: UsuarioResponse) => Promise<void>;
   autenticar: () => Promise<void>;
+  cerrarSesion: () => Promise<void>;
 }
 
 export const AuthContext = createContext({} as AuthContextProps);
@@ -35,14 +36,22 @@ export const AuthProvider = ({ children }: any) => {
 
   const autenticar = async () => {
     try {
-      const { data } = await Api.get<Usuario>("/auth");
+      const { data } = await Api.get<UsuarioResponse>("/auth");
       dispatch({
         type: "Login",
-        payload: data,
+        payload: data.usuario,
       });
     } catch (error) {
       dispatch({ type: "notAuthenticated" });
     }
+  };
+
+  const cerrarSesion = async () => {
+    await AsyncStorage.removeItem("token");
+
+    dispatch({
+      type: "logOut",
+    });
   };
 
   return (
@@ -51,6 +60,7 @@ export const AuthProvider = ({ children }: any) => {
         auth,
         login,
         autenticar,
+        cerrarSesion,
       }}>
       {children}
     </AuthContext.Provider>

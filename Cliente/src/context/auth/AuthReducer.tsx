@@ -17,6 +17,7 @@ export const AuthReducer = (
     case "Actualizar":
     case "Login":
       const { _id, nombre, apellido, correo, foto } = action.payload;
+
       return {
         ...state,
         _id,
