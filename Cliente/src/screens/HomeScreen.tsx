@@ -1,14 +1,19 @@
 import React, { useContext, useEffect } from "react";
-import { Text, View,StyleSheet, Image, TextInput, Dimensions } from "react-native";
-import { Ionicons } from '@expo/vector-icons';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TextInput,
+  Dimensions,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import Api from "../api";
 import { Input } from "../components/Input";
 import { ThemeContext } from "../context/theme/ThemeContext";
 
-
-const {width} =  Dimensions.get("window");
-
+const { width } = Dimensions.get("window");
 
 export const HomeScreen = () => {
   const {
@@ -17,50 +22,55 @@ export const HomeScreen = () => {
       dark,
     },
   } = useContext(ThemeContext);
+
   return (
     <>
-    <View style={styles.titlebox}>
-            <View>
-              <Text style={[styles.title, {color: text}]}>Twist and Wine</Text>
-              <Text style={[styles.subtitle, {color: text}]}>Adquiere los Mejores Vinos</Text>
-            </View>
-            <Image
-              style={[styles.logo, { backgroundColor: background }]}
-              source={
-                dark
-                ? require("../assets/logoOscuro.png")
-                : require("../assets/logoClaro.png")
-              }
-            />
-    </View>
-    <View style={styles.filterbox}>
-      <Ionicons name="search-outline" color={primary} style={[styles.icons, {position:"absolute", bottom:1, left:5}]}/>
-      <TextInput style={styles.filter} placeholder="Buscar"/>
-    </View>
-    <View>
-
-    </View>
+      <View style={styles.titlebox}>
+        <View>
+          <Text style={[styles.title, { color: text }]}>Twist and Wine</Text>
+          <Text style={[styles.subtitle, { color: text }]}>
+            Adquiere los Mejores Vinos
+          </Text>
+        </View>
+        <Image
+          style={[styles.logo, { backgroundColor: background }]}
+          source={
+            dark
+              ? require("../assets/logoOscuro.png")
+              : require("../assets/logoClaro.png")
+          }
+        />
+      </View>
+      <View style={styles.filterbox}>
+        <Ionicons
+          name='search-outline'
+          color={primary}
+          style={[styles.icons, { position: "absolute", bottom: 1, left: 5 }]}
+        />
+        <TextInput style={styles.filter} placeholder='Buscar' />
+      </View>
+      <View></View>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  logo:{
+  logo: {
     width: 90,
     height: 90,
     borderRadius: 30,
   },
-  titlebox:{
+  titlebox: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
   },
-  title:{
+  title: {
     fontSize: 35,
     fontWeight: "bold",
   },
-  subtitle:{
+  subtitle: {
     fontSize: 20,
   },
   filterbox: {
@@ -79,8 +89,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     paddingLeft: 70,
     paddingVertical: 5,
-    marginHorizontal: 40, 
+    marginHorizontal: 40,
     fontSize: 20,
     borderRadius: 30,
   },
-})
+});
