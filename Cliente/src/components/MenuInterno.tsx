@@ -9,6 +9,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { DrawerContentComponentProps } from "@react-navigation/drawer";
+import { Ionicons } from "@expo/vector-icons";
 import { ThemeContext } from "../context/theme/ThemeContext";
 import { Fab } from "./Fab";
 import { AuthContext } from "../context/auth/AuthContext";
@@ -57,24 +58,44 @@ export const MenuInterno = ({ navigation }: DrawerContentComponentProps) => {
           activeOpacity={0.8}
           style={[styles.btn, { backgroundColor: secondary }]}
           onPress={() => navigation.navigate("Inicio")}>
+          <Ionicons
+            name='home'
+            color={primary}
+            style={{ fontSize: 25, marginLeft: 20 }}
+          />
           <Text style={[styles.textBtn, { color: text }]}>Inicio</Text>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
           style={[styles.btn, { backgroundColor: secondary }]}
           onPress={() => navigation.navigate("NuevoProductoScreen")}>
+          <Ionicons
+            name='add-circle'
+            color={primary}
+            style={{ fontSize: 25, marginLeft: 20 }}
+          />
           <Text style={[styles.textBtn, { color: text }]}>Nuevo Producto</Text>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
           style={[styles.btn, { backgroundColor: secondary }]}
           onPress={() => navigation.navigate("MisProductosScreen")}>
+          <Ionicons
+            name='wine'
+            color={primary}
+            style={{ fontSize: 25, marginLeft: 20 }}
+          />
           <Text style={[styles.textBtn, { color: text }]}>Mis Productos</Text>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
           style={[styles.btn, { backgroundColor: secondary }]}
           onPress={() => navigation.navigate("MisPedidosScreen")}>
+          <Ionicons
+            name='clipboard-sharp'
+            color={primary}
+            style={{ fontSize: 25, marginLeft: 20 }}
+          />
           <Text style={[styles.textBtn, { color: text }]}>Mis Pedidos</Text>
         </TouchableOpacity>
         <View style={styles.cuenta}>
@@ -82,12 +103,22 @@ export const MenuInterno = ({ navigation }: DrawerContentComponentProps) => {
             activeOpacity={0.8}
             style={[styles.btn, { backgroundColor: secondary }]}
             onPress={() => navigation.navigate("MiCuentaScreen")}>
+            <Ionicons
+              name='person'
+              color={primary}
+              style={{ fontSize: 25, marginLeft: 20 }}
+            />
             <Text style={[styles.textBtn, { color: text }]}>Mi Cuenta</Text>
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
             style={[styles.btn, { backgroundColor: secondary }]}
             onPress={() => cerrarSesion()}>
+            <Ionicons
+              name='log-in'
+              color={primary}
+              style={{ fontSize: 25, marginLeft: 20 }}
+            />
             <Text style={[styles.textBtn, { color: text }]}>Cerrar Sesión</Text>
           </TouchableOpacity>
         </View>
@@ -128,11 +159,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: 20,
     marginHorizontal: 10,
+    flexDirection: "row",
   },
   textBtn: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#FFFFFF",
+    marginLeft: 10,
   },
   cuenta: {
     flex: 1,
