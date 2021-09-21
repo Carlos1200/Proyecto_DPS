@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -12,6 +12,9 @@ import { Ionicons } from "@expo/vector-icons";
 import Api from "../api";
 import { Input } from "../components/Input";
 import { ThemeContext } from "../context/theme/ThemeContext";
+import { Producto, ProductosResponse } from "../interfaces";
+import { FlatList } from "react-native-gesture-handler";
+import { ProductCard } from "../components/ProductCard";
 
 const { width } = Dimensions.get("window");
 
@@ -22,6 +25,17 @@ export const HomeScreen = () => {
       dark,
     },
   } = useContext(ThemeContext);
+
+  const [productos, setProductos] = useState<Producto[]>();
+  
+  const ObtenerProductos = async() => {
+    const {data} = await Api.get<ProductosResponse>("/producto");
+    setProductos(data.productos);
+  }
+  
+  useEffect(() => {
+    ObtenerProductos();
+  }, []);
 
   return (
     <>
@@ -43,13 +57,26 @@ export const HomeScreen = () => {
       </View>
       <View style={styles.filterbox}>
         <Ionicons
-          name='search-outline'
+          name='search'
           color={primary}
-          style={[styles.icons, { position: "absolute", bottom: 1, left: 5 }]}
+          style={[styles.icons, { position: "absolute", bottom: 1, left: 6 }]}
         />
         <TextInput style={styles.filter} placeholder='Buscar' />
+        <Ionicons
+          name='options'
+          color={primary}
+          style={[styles.icons, {position: "absolute", bottom: 1, right: 6}]}
+        />
       </View>
-      <View></View>
+      <View style={{flex:1, alignSelf:'center', marginBottom: 90}}>
+        <FlatList
+          data={productos}
+          keyExtractor={(item) => item._id}
+          renderItem={({item}) => <ProductCard producto={item}/>}
+          numColumns={3}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
     </>
   );
 };
@@ -78,6 +105,7 @@ const styles = StyleSheet.create({
     width: width >= 1000 ? "50%" : "80%",
     alignItems: "center",
     alignSelf: "center",
+    marginBottom: 30,
   },
   icons: {
     fontSize: 30,
@@ -93,4 +121,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     borderRadius: 30,
   },
+  
 });
