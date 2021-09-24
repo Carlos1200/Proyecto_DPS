@@ -109,7 +109,6 @@ export const LoginScreen = ({ navigation }: Props) => {
               <Text style={styles.error}>{errors.password.message}</Text>
             )}
           </View>
-          <Btn title='Ingresar' onpress={handleSubmit(onSubmit)} />
         </View>
         <View style={styles.info}>
           <Text style={{ color: text }}>¿No tienes cuenta?</Text>
