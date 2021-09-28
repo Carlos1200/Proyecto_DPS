@@ -1,62 +1,41 @@
-import React from "react";
-import { TouchableOpacity, Text, StyleSheet, Alert } from "react-native";
+import React, { useContext, useEffect } from "react";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import * as AuthSession from "expo-auth-session";
+import * as Google from "expo-google-app-auth";
+import Api from "../api/index";
+import { AuthContext } from "../context/auth/AuthContext";
+import { UsuarioResponse } from "../interfaces/index";
 
 interface Props {
   color: string;
 }
 
-const auth0ClientId = "8uAPe86FHrFBzCc0NfsZV2szQkf9LTfB";
-const auth0Domain = "https://dev-k-r087zn.us.auth0.com";
-
 export const BtnGoogle = ({ color }: Props) => {
-  const toQueryString = (params) => {
-    return (
-      "?" +
-      Object.entries(params)
-        .map(
-          ([key, value]: any) =>
-            `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-        )
-        .join("&")
-    );
-  };
+  const { login } = useContext(AuthContext);
+
+  useEffect(() => {
+    return () => {};
+  }, []);
 
   const handleGoogle = async () => {
-    // Retrieve the redirect URL, add this to the callback URL list
-    // of your Auth0 application.
-    const redirectUrl = AuthSession.makeRedirectUri();
-    console.log(`Redirect URL: ${redirectUrl}`);
+    const config = {
+      iosClientId: `366734103326-0ak62iulih5cjk9gvdvethihff59p163.apps.googleusercontent.com`,
+      androidClientId: `366734103326-53h41ioidevplijsqih5uol0btn7vfpr.apps.googleusercontent.com`,
+      scopes: ["profile", "email"],
+    };
 
-    // Structure the auth parameters and URL
-    const queryParams = toQueryString({
-      client_id: auth0ClientId,
-      redirect_uri: redirectUrl,
-      response_type: "id_token", // id_token will return a JWT token
-      scope: "openid profile", // retrieve the user's profile
-      nonce: "nonce", // ideally, this will be a random value
-    });
-    const authUrl = `${auth0Domain}/authorize` + queryParams;
-    console.log(authUrl);
+    try {
+      const { idToken, type }: any = await Google.logInAsync(config);
 
-    // Perform the authentication
-    const response = await AuthSession.startAsync({ authUrl });
-    console.log("Authentication response", response);
-
-    if (response.type === "success") {
-      handleResponse(response.params);
+      if (type === "success") {
+        const { data } = await Api.post<UsuarioResponse>("/auth/loginGoogle", {
+          idToken,
+        });
+        login(data);
+      }
+    } catch (error) {
+      console.log(error);
     }
-  };
-
-  const handleResponse = (response) => {
-    if (response.error) {
-      return;
-    }
-
-    // Retrieve the JWT token and decode it
-    const jwtToken = response.id_token;
-    console.log(jwtToken);
   };
 
   return (

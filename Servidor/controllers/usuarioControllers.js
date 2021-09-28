@@ -1,6 +1,6 @@
 const Usuario=require('../models/Usuario');
 const bcryptjs = require('bcryptjs');
-const {generarJWT} =require('../helpers');
+const {generarJWT,googleVerify} =require('../helpers');
 require("dotenv").config({ path: "variables.env" });
 
 const cloudinary =require('cloudinary').v2;
@@ -81,6 +81,36 @@ logIn=async(req,res,next)=>{
     }
 }
 
+loginGoogle=async(req,res,next)=>{
+ const {idToken}=req.body;
+ try {
+    const {email,picture,given_name,family_name}=await googleVerify(idToken);
+
+    let usuario = await Usuario.findOne({ correo:email });
+
+    if(!usuario){
+        const data={
+            nombre:given_name,
+            apellido:family_name,
+            correo:email,
+            password:':P',
+            foto:picture,
+        }
+
+        usuario = new Usuario( data );
+        await usuario.save();
+    }
+
+    const token=await generarJWT(usuario);
+
+    res.json({usuario,token});
+    
+ } catch (error) {
+    res.json({msg:"No se pudo iniciar sesión"});
+    next();
+ }
+}
+
 actualizarUsuario=async(req,res,next)=>{
     const {correo,password}=req.body;
 
@@ -151,6 +181,8 @@ obtenerUsuario=async(req,res,next)=>{
 module.exports={
     nuevoUsuario,
     logIn,
+    loginGoogle,
     actualizarUsuario,
-    obtenerUsuario
+    obtenerUsuario,
+    
 }
