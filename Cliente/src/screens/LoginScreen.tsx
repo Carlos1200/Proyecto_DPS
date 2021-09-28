@@ -17,6 +17,7 @@ import { Btn } from "../components/Btn";
 import { StackScreenProps } from "@react-navigation/stack";
 import Api from "../api/index";
 import { AuthContext } from "../context/auth/AuthContext";
+import { BtnGoogle } from "../components/BtnGoogle";
 
 const { width } = Dimensions.get("window");
 
@@ -110,6 +111,7 @@ export const LoginScreen = ({ navigation }: Props) => {
             )}
           </View>
           <Btn title='Ingresar' onpress={handleSubmit(onSubmit)} />
+          <BtnGoogle color={primary} />
         </View>
         <View style={styles.info}>
           <Text style={{ color: text }}>¿No tienes cuenta?</Text>

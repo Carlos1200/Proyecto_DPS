@@ -6,7 +6,8 @@
       },
       "android": {
         "userInterfaceStyle": "automatic"
-      }
+      },
+      "scheme": "mycoolredirect"
     },
     "splash": {
       "image": "./src/assets/logoOscuro.png",
