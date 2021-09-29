@@ -7,6 +7,8 @@ import { MisProductosScreen } from "../screens/MisProductosScreen";
 import { MisPedidosScreen } from "../screens/MisPedidosScreen";
 import { MiCuentaScreen } from "../screens/MiCuentaScreen";
 import { Producto } from "../interfaces/index";
+import { MenuInterno } from "../components/MenuInterno";
+import { Dimensions } from "react-native";
 
 export type RootDrawerParams = {
   Inicio: undefined;
@@ -15,6 +17,9 @@ export type RootDrawerParams = {
   MisPedidosScreen: undefined;
   MiCuentaScreen: undefined;
 };
+
+const { width } = Dimensions.get("window");
+
 const Drawer = createDrawerNavigator<RootDrawerParams>();
 
 export const DrawerNavigation = () => {
@@ -31,7 +36,9 @@ export const DrawerNavigation = () => {
         sceneContainerStyle: {
           backgroundColor: background,
         },
-      }}>
+        drawerType: width >= 1000 ? "permanent" : "slide",
+      }}
+      drawerContent={(prop) => <MenuInterno {...prop} />}>
       <Drawer.Screen name='Inicio' component={TabsNavigator} />
       <Drawer.Screen
         name='NuevoProductoScreen'

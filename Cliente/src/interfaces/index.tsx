@@ -8,13 +8,13 @@ export interface UsuarioResponse {
 }
 
 export interface Usuario {
-  creado: string;
+  creado?: string;
   _id: string;
   nombre: string;
   apellido: string;
   correo: string;
-  password: string;
-  __v: number;
+  password?: string;
+  __v?: number;
   foto?: string;
 }
 
