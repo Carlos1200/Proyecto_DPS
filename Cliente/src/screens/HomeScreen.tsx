@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -6,12 +6,18 @@ import {
   Image,
   TextInput,
   Dimensions,
+  SafeAreaView,
+  StatusBar,
+  RefreshControl,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import Api from "../api";
 import { Input } from "../components/Input";
 import { ThemeContext } from "../context/theme/ThemeContext";
+import { Producto, ProductosResponse } from "../interfaces";
+import { FlatList } from "react-native-gesture-handler";
+import { ProductCard } from "../components/ProductCard";
 
 const { width } = Dimensions.get("window");
 
@@ -23,8 +29,31 @@ export const HomeScreen = () => {
     },
   } = useContext(ThemeContext);
 
+  const [productos, setProductos] = useState<Producto[]>();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const ObtenerProductos = async () => {
+    const { data } = await Api.get<ProductosResponse>("/producto");
+    setProductos(data.productos);
+  };
+
+  const onRefresh = () => {
+    setRefreshing(true);
+
+    ObtenerProductos();
+    setRefreshing(false);
+  };
+
+  useEffect(() => {
+    ObtenerProductos();
+  }, []);
+
   return (
-    <>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        marginTop: StatusBar.currentHeight,
+      }}>
       <View style={styles.titlebox}>
         <View>
           <Text style={[styles.title, { color: text }]}>Twist and Wine</Text>
@@ -43,14 +72,38 @@ export const HomeScreen = () => {
       </View>
       <View style={styles.filterbox}>
         <Ionicons
-          name='search-outline'
+          name='search'
           color={primary}
-          style={[styles.icons, { position: "absolute", bottom: 1, left: 5 }]}
+          style={[styles.icons, { position: "absolute", bottom: 1, left: 6 }]}
         />
         <TextInput style={styles.filter} placeholder='Buscar' />
+        <Ionicons
+          name='options'
+          color={primary}
+          style={[styles.icons, { position: "absolute", bottom: 1, right: 6 }]}
+        />
       </View>
-      <View></View>
-    </>
+      <View style={{ flex: 1, alignSelf: "center" }}>
+        <FlatList
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => onRefresh()}
+              enabled={true}
+              progressBackgroundColor={primary}
+            />
+          }
+          refreshing={refreshing}
+          onRefresh={() => onRefresh()}
+          data={productos}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => <ProductCard producto={item} />}
+          numColumns={width >= 1000 ? 3 : 1}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={() => <View style={{ marginBottom: 100 }} />}
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -78,6 +131,7 @@ const styles = StyleSheet.create({
     width: width >= 1000 ? "50%" : "80%",
     alignItems: "center",
     alignSelf: "center",
+    marginBottom: 30,
   },
   icons: {
     fontSize: 30,
