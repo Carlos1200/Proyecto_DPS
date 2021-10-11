@@ -29,7 +29,6 @@ export const Input = ({ control, name, style }: Props) => {
         />
       )}
       name={name}
-      defaultValue=''
     />
   );
 };

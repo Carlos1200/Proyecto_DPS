@@ -5,6 +5,7 @@ const productos=require('./routes/productos');
 const pedidos=require('./routes/pedidos');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
+
 //:D
 //crear servidor
 const app=express();
@@ -34,6 +35,6 @@ app.use('/api/pedidos/',pedidos());
  
 
 // puerto y arrancar el servidor
-app.listen( 4000,() => {
-    console.log('Servidor funcionando')
+app.listen( process.env.PORT||4000,() => {
+    console.log('Servidor funcionando',process.env.PORT)
 })

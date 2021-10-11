@@ -1,14 +1,23 @@
 import React, { useContext } from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
-import { ThemeContext } from "../context/theme/ThemeContext";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  Dimensions,
+  ScrollView,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useForm } from "react-hook-form";
-
 import * as yup from "yup";
+
+import { ThemeContext } from "../context/theme/ThemeContext";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AuthContext } from "../context/auth/AuthContext";
 import { Input } from "../components/Input";
 import { Btn } from "../components/Btn";
+
+const { width } = Dimensions.get("window");
 
 export const MiCuentaScreen = () => {
   const {
@@ -29,7 +38,7 @@ export const MiCuentaScreen = () => {
     correo: string;
     password: string;
   }
-  
+
   const schema = yup.object().shape({
     nombre: yup.string().required("El nombre es obligatorio"),
     apellido: yup.string().required("El apellido es obligatorio"),
@@ -49,106 +58,107 @@ export const MiCuentaScreen = () => {
     formState: { errors },
   } = useForm<NewUser>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      nombre,
+      apellido,
+      correo,
+    },
   });
 
   return (
-    <>
-    <View style={[styles.headerBox, {backgroundColor:primary}]}>
-      <Ionicons
-        name='create'
-        color={'#FFF'}
-        style={styles.icons}
-      />
-    </View>
-    <View style={styles.formBox}>
-      <View style={styles.imageContainer}>
-        <Image
-          source={foto ? { uri: foto } : require("../assets/user.png")}
-          style={styles.image}
-        />
+    <ScrollView>
+      <View style={[styles.headerBox, { backgroundColor: primary }]}>
+        {/* <Ionicons name='create' color={"#FFF"} style={styles.icons} /> */}
+        <View style={styles.imageContainer}>
+          <Image
+            source={foto ? { uri: foto } : require("../assets/user.png")}
+            style={styles.image}
+          />
+        </View>
       </View>
-      <View style={styles.nameBox}>
-        <Text style={[styles.titleName, {color:text}]}>{nombre}</Text>
-        <Text style={[styles.titleName, {color:text}]}>{apellido}</Text>
-      </View>
-      <View>
-        <Text style={[styles.label, { color: text }]}>Nombre</Text>
-        <Input control={control} name='nombre' style={styles.input} />
+      <View style={styles.formBox}>
+        <View style={styles.nameBox}>
+          <Text style={[styles.titleName, { color: text }]}>{nombre}</Text>
+          <Text style={[styles.titleName, { color: text }]}>{apellido}</Text>
+        </View>
+        <View>
+          <Text style={[styles.label, { color: text }]}>Nombre</Text>
+          <Input control={control} name='nombre' style={styles.input} />
           {errors.nombre && (
             <Text style={styles.error}>{errors.nombre.message}</Text>
           )}
-      </View>
-      <View>
-        <Text style={[styles.label, { color: text }]}>Apellido</Text>
-        <Input control={control} name='apellido' style={styles.input} />
+        </View>
+        <View>
+          <Text style={[styles.label, { color: text }]}>Apellido</Text>
+          <Input control={control} name='apellido' style={styles.input} />
           {errors.apellido && (
             <Text style={styles.error}>{errors.apellido.message}</Text>
           )}
-      </View>
-      <View>
-        <Text style={[styles.label, { color: text }]}>Correo</Text>
-        <Input control={control} name='correo' style={styles.input} />
+        </View>
+        <View>
+          <Text style={[styles.label, { color: text }]}>Correo</Text>
+          <Input control={control} name='correo' style={styles.input} />
           {errors.correo && (
             <Text style={styles.error}>{errors.correo.message}</Text>
           )}
-      </View>
-      <View>
-        <Text style={[styles.label, { color: text }]}>Contraseña</Text>
-        <Input control={control} name='password' style={styles.input} />
+        </View>
+        <View>
+          <Text style={[styles.label, { color: text }]}>Contraseña</Text>
+          <Input control={control} name='password' style={styles.input} />
           {errors.password && (
             <Text style={styles.error}>{errors.password.message}</Text>
           )}
+        </View>
       </View>
-    </View>
-    <View style={styles.buttonBox}>    
-      <Btn title='Cambiar Foto de Perfil' style={[styles.button, {color:text, backgroundColor:primary}]}/>
-      <Btn title='Guardar Cambios' style={[styles.button, {color:text, backgroundColor:primary}]}/>
-    </View>
-    </>
+      <View style={styles.buttonBox}>
+        <Btn title='Cambiar Foto de Perfil' style={[styles.button]} />
+        <Btn title='Guardar Cambios' style={[styles.button]} />
+      </View>
+    </ScrollView>
   );
 };
 
-
 const styles = StyleSheet.create({
-  headerBox:{
-    display:"flex",
-    flexDirection:'row',
-    height: 60,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    paddingLeft: '90%',
-    alignItems:'center',
+  headerBox: {
+    display: "flex",
+    height: 150,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  headerText:{
+  headerText: {
     fontSize: 30,
     paddingRight: 10,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
-  icons:{
+  icons: {
     fontSize: 50,
     fontWeight: "bold",
   },
-  formBox:{
+  formBox: {
     display: "flex",
-    flexDirection: 'column',
-    width: '50%',
-    justifyContent: 'center',
-    alignSelf: 'center',
+    flexDirection: "column",
+    width: width > 1000 ? "50%" : "90%",
+    justifyContent: "center",
+    alignSelf: "center",
+    marginTop: 80,
   },
-  nameBox:{
-    display: 'flex',
-    flexDirection: 'row',
-    alignSelf:'center',
+  nameBox: {
+    display: "flex",
+    flexDirection: "row",
+    alignSelf: "center",
   },
-  titleName:{
+  titleName: {
     fontSize: 30,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     paddingHorizontal: 5,
   },
   imageContainer: {
     alignItems: "center",
     marginTop: 20,
     marginBottom: 20,
+    top: "50%",
   },
   image: {
     width: 170,
@@ -160,7 +170,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 20,
     paddingHorizontal: 10,
-    paddingLeft:15,
+    paddingLeft: 15,
     fontSize: 16,
   },
   label: {
@@ -175,14 +185,15 @@ const styles = StyleSheet.create({
     borderLeftColor: "red",
     paddingLeft: 5,
   },
-  buttonBox:{
-    display: 'flex',
-    flexDirection: 'column',
+  buttonBox: {
+    display: "flex",
+    flexDirection: "column",
   },
-  button:{
+  button: {
     paddingVertical: 10,
-    textAlign: 'center',
-    width: '40%',
-    alignSelf:'center',
-  }
-})
+    textAlign: "center",
+    width: width > 1000 ? "40%" : "90%",
+    alignSelf: "center",
+    marginTop: 15,
+  },
+});

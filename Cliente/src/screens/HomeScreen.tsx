@@ -39,8 +39,9 @@ export const HomeScreen = () => {
 
   const onRefresh = () => {
     setRefreshing(true);
-
-    ObtenerProductos();
+    setTimeout(() => {
+      ObtenerProductos();
+    }, 1500);
     setRefreshing(false);
   };
 
@@ -89,12 +90,9 @@ export const HomeScreen = () => {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={() => onRefresh()}
-              enabled={true}
               progressBackgroundColor={primary}
             />
           }
-          refreshing={refreshing}
-          onRefresh={() => onRefresh()}
           data={productos}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => <ProductCard producto={item} />}
