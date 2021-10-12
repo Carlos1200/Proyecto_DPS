@@ -49,7 +49,7 @@ export const NuevoUsuarioScreen = ({ navigation }: Props) => {
   } = useContext(ThemeContext);
   const { login } = useContext(AuthContext);
 
-  const {
+  const { 
     control,
     handleSubmit,
     formState: { errors },

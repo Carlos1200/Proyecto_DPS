@@ -3,6 +3,7 @@ const {check,param}=require('express-validator');
 const router=express.Router();
 const {nuevoUsuario,logIn,actualizarUsuario,obtenerUsuario,loginGoogle}=require('../controllers/usuarioControllers');
 
+
 const {validarCampos,validarJWT} = require('../middlewares');
 
 

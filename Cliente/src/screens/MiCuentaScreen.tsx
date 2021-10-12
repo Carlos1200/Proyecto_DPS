@@ -38,7 +38,6 @@ export const MiCuentaScreen = () => {
     correo: string;
     password: string;
   }
-
   const schema = yup.object().shape({
     nombre: yup.string().required("El nombre es obligatorio"),
     apellido: yup.string().required("El apellido es obligatorio"),
