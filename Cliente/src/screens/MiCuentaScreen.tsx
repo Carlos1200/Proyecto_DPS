@@ -101,7 +101,7 @@ export const MiCuentaScreen = () => {
       </View>
     </View>
     <View style={styles.buttonBox}>    
-      <Btn title='Cambiar Foto de Perfil' style={[styles.button, {color:text, backgroundColor:primary}]}/>
+      <Btn title='Cambiar Foto de Perfil' style={[styles.button, {color: text, backgroundColor:primary}]}/>
       <Btn title='Guardar Cambios' style={[styles.button, {color:text, backgroundColor:primary}]}/>
     </View>
     </>

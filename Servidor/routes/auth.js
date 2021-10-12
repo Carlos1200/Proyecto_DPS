@@ -1,7 +1,11 @@
 const express=require('express');
 const {check,param}=require('express-validator');
 const router=express.Router();
+<<<<<<< HEAD
 const {nuevoUsuario,logIn,actualizarUsuario,obtenerUsuario,loginGoogle}=require('../controllers/usuarioControllers');
+=======
+const {nuevoUsuario,logIn,actualizarUsuario,obtenerUsuario}=require('../controllers/usuarioControllers');
+>>>>>>> 8caf1963cb452acb00cae91716a371fe00b0e544
 
 const {validarCampos,validarJWT} = require('../middlewares');
 
@@ -24,11 +28,14 @@ module.exports=()=>{
         validarCampos
     ],logIn);
 
+<<<<<<< HEAD
     router.post('/loginGoogle',[
         check('idToken',"El token es obligatorio").notEmpty(),
         validarCampos
     ],loginGoogle)
 
+=======
+>>>>>>> 8caf1963cb452acb00cae91716a371fe00b0e544
     router.put('/usuarios/:id',[
         validarJWT,
         check('nombre','El nombre es obligatorio').not().isEmpty(),

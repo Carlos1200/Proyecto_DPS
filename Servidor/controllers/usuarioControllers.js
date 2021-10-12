@@ -1,6 +1,10 @@
 const Usuario=require('../models/Usuario');
 const bcryptjs = require('bcryptjs');
+<<<<<<< HEAD
 const {generarJWT,googleVerify} =require('../helpers');
+=======
+const {generarJWT} =require('../helpers');
+>>>>>>> 8caf1963cb452acb00cae91716a371fe00b0e544
 require("dotenv").config({ path: "variables.env" });
 
 const cloudinary =require('cloudinary').v2;
@@ -81,6 +85,7 @@ logIn=async(req,res,next)=>{
     }
 }
 
+<<<<<<< HEAD
 loginGoogle=async(req,res,next)=>{
  const {idToken}=req.body;
  try {
@@ -111,6 +116,8 @@ loginGoogle=async(req,res,next)=>{
  }
 }
 
+=======
+>>>>>>> 8caf1963cb452acb00cae91716a371fe00b0e544
 actualizarUsuario=async(req,res,next)=>{
     const {correo,password}=req.body;
 
@@ -181,8 +188,13 @@ obtenerUsuario=async(req,res,next)=>{
 module.exports={
     nuevoUsuario,
     logIn,
+<<<<<<< HEAD
     loginGoogle,
     actualizarUsuario,
     obtenerUsuario,
     
+=======
+    actualizarUsuario,
+    obtenerUsuario
+>>>>>>> 8caf1963cb452acb00cae91716a371fe00b0e544
 }
