@@ -42,6 +42,7 @@ export const HomeScreen = () => {
     setTimeout(() => {
       ObtenerProductos();
     }, 1500);
+
     setRefreshing(false);
   };
 
@@ -93,6 +94,7 @@ export const HomeScreen = () => {
               progressBackgroundColor={primary}
             />
           }
+
           data={productos}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => <ProductCard producto={item} />}

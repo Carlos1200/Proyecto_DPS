@@ -5,7 +5,6 @@ const productos=require('./routes/productos');
 const pedidos=require('./routes/pedidos');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
-
 //:D
 //crear servidor
 const app=express();

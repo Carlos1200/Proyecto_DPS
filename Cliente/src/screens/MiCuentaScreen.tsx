@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+
 import {
   Text,
   View,
@@ -12,12 +13,15 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
 import { ThemeContext } from "../context/theme/ThemeContext";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AuthContext } from "../context/auth/AuthContext";
 import { Input } from "../components/Input";
 import { Btn } from "../components/Btn";
 
+
 const { width } = Dimensions.get("window");
+
 
 export const MiCuentaScreen = () => {
   const {
@@ -38,6 +42,7 @@ export const MiCuentaScreen = () => {
     correo: string;
     password: string;
   }
+
   const schema = yup.object().shape({
     nombre: yup.string().required("El nombre es obligatorio"),
     apellido: yup.string().required("El apellido es obligatorio"),
@@ -151,6 +156,7 @@ const styles = StyleSheet.create({
   titleName: {
     fontSize: 30,
     fontWeight: "bold",
+
     paddingHorizontal: 5,
   },
   imageContainer: {
@@ -184,6 +190,7 @@ const styles = StyleSheet.create({
     borderLeftColor: "red",
     paddingLeft: 5,
   },
+
   buttonBox: {
     display: "flex",
     flexDirection: "column",
@@ -196,3 +203,4 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
 });
+
