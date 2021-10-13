@@ -11,6 +11,7 @@ export const MisProductosScreen = () => {
   return (
     <View>
       <Text style={{ color: text }}>Mis Productos</Text>
+      
     </View>
   );
 };
