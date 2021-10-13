@@ -184,5 +184,4 @@ module.exports={
     loginGoogle,
     actualizarUsuario,
     obtenerUsuario,
-    
 }
