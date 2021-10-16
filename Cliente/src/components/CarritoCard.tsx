@@ -7,6 +7,7 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { ThemeContext } from "../context/theme/ThemeContext";
 import { Producto } from "../interfaces";
 
@@ -35,9 +36,9 @@ export const CarritoCard = ({ producto }: Props) => {
         <Text style={[styles.nombre, { color: text }]}>{year}</Text>
         <Text style={[styles.precio, { color: primary }]}>$ {precio}</Text>
       </View>
-      <View>
+      <TouchableOpacity>
         <Text style={[styles.eliminar, { color: primary }]}>X</Text>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   centro: {
-    width:'60%'
+    width: "60%",
   },
   picture: {
     height: 70,
@@ -76,14 +77,14 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontSize: 20,
     marginRight: 30,
-    marginBottom:10,
+    marginBottom: 10,
     fontWeight: "bold",
   },
   eliminar: {
-    backgroundColor:'#5A6978',
+    // backgroundColor:'#5A6978',
     borderRadius: 10,
     marginLeft: 5,
-    padding:5,
+    padding: 5,
     textAlign: "right",
     fontSize: 18,
     marginRight: 5,

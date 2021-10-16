@@ -9,6 +9,8 @@ interface AuthContextProps {
   login: ({ usuario, token }: UsuarioResponse) => Promise<void>;
   autenticar: () => Promise<void>;
   cerrarSesion: () => Promise<void>;
+  actualizarFoto: (foto: string) => void;
+  actualizarUsuario: (usuario: Usuario) => void;
 }
 
 export const AuthContext = createContext({} as AuthContextProps);
@@ -54,6 +56,20 @@ export const AuthProvider = ({ children }: any) => {
     });
   };
 
+  const actualizarFoto = (foto: string) => {
+    dispatch({
+      type: "ActualizarFoto",
+      payload: foto,
+    });
+  };
+
+  const actualizarUsuario = (usuario: Usuario) => {
+    dispatch({
+      type: "Actualizar",
+      payload: usuario,
+    });
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -61,6 +77,8 @@ export const AuthProvider = ({ children }: any) => {
         login,
         autenticar,
         cerrarSesion,
+        actualizarFoto,
+        actualizarUsuario,
       }}>
       {children}
     </AuthContext.Provider>
