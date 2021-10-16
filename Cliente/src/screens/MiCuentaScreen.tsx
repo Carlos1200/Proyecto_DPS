@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
 import {
   Text,
@@ -18,10 +18,30 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { AuthContext } from "../context/auth/AuthContext";
 import { Input } from "../components/Input";
 import { Btn } from "../components/Btn";
-
+import * as ImagePicker from "expo-image-picker";
+import Api from "../api";
+import { UsuarioResponse } from "../interfaces/index";
 
 const { width } = Dimensions.get("window");
+interface NewUser {
+  nombre: string;
+  apellido: string;
+  correo: string;
+  password: string;
+}
 
+const schema = yup.object().shape({
+  nombre: yup.string().required("El nombre es obligatorio"),
+  apellido: yup.string().required("El apellido es obligatorio"),
+  correo: yup
+    .string()
+    .required("El correo es necesario")
+    .email("El correo no es válido"),
+  password: yup
+    .string()
+    .required("La contraseña es necesaria")
+    .min(6, "Se requieren 6 caracteres mínimo"),
+});
 
 export const MiCuentaScreen = () => {
   const {
@@ -32,30 +52,12 @@ export const MiCuentaScreen = () => {
   } = useContext(ThemeContext);
 
   const {
-    auth: { nombre, apellido, foto, correo },
-    cerrarSesion,
+    auth: { nombre, apellido, foto, correo, _id },
+    actualizarFoto,
+    actualizarUsuario,
   } = useContext(AuthContext);
 
-  interface NewUser {
-    nombre: string;
-    apellido: string;
-    correo: string;
-    password: string;
-  }
-
-  const schema = yup.object().shape({
-    nombre: yup.string().required("El nombre es obligatorio"),
-    apellido: yup.string().required("El apellido es obligatorio"),
-    correo: yup
-      .string()
-      .required("El correo es necesario")
-      .email("El correo no es válido"),
-    password: yup
-      .string()
-      .required("La contraseña es necesaria")
-      .min(6, "Se requieren 6 caracteres mínimo"),
-  });
-
+  const [error, setError] = useState(null);
   const {
     control,
     handleSubmit,
@@ -68,6 +70,53 @@ export const MiCuentaScreen = () => {
       correo,
     },
   });
+
+  const pickImage = async () => {
+    let result: any = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: false,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      const file: any = {
+        uri: result.uri,
+        type: "image/jpeg",
+        name: "Imagen Usuario",
+      };
+
+      const formData = new FormData();
+      formData.append("archivo", file);
+      try {
+        const { data } = await Api.put(`/upload/usuario/${_id}`, formData);
+
+        actualizarFoto(data.foto);
+      } catch (error) {
+        setError(error.response.data.msg);
+        setTimeout(() => {
+          setError(null);
+        }, 3000);
+      }
+    }
+  };
+
+  const submit = async ({ nombre, apellido, correo, password }: NewUser) => {
+    try {
+      const { data } = await Api.put<UsuarioResponse>(`/auth/usuarios/${_id}`, {
+        nombre,
+        apellido,
+        correo,
+        password,
+      });
+      actualizarUsuario(data.usuario);
+    } catch (error) {
+      setError(error.response.data.msg);
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
+    }
+  };
 
   return (
     <ScrollView>
@@ -85,6 +134,17 @@ export const MiCuentaScreen = () => {
           <Text style={[styles.titleName, { color: text }]}>{nombre}</Text>
           <Text style={[styles.titleName, { color: text }]}>{apellido}</Text>
         </View>
+        {error && (
+          <Text
+            style={{
+              textAlign: "center",
+              color: "red",
+              fontSize: 18,
+              marginTop: 10,
+            }}>
+            {error}
+          </Text>
+        )}
         <View>
           <Text style={[styles.label, { color: text }]}>Nombre</Text>
           <Input control={control} name='nombre' style={styles.input} />
@@ -115,8 +175,16 @@ export const MiCuentaScreen = () => {
         </View>
       </View>
       <View style={styles.buttonBox}>
-        <Btn title='Cambiar Foto de Perfil' style={[styles.button]} />
-        <Btn title='Guardar Cambios' style={[styles.button]} />
+        <Btn
+          title='Cambiar Foto de Perfil'
+          style={[styles.button]}
+          onpress={pickImage}
+        />
+        <Btn
+          title='Guardar Cambios'
+          style={[styles.button]}
+          onpress={handleSubmit(submit)}
+        />
       </View>
     </ScrollView>
   );
@@ -203,4 +271,3 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
 });
-

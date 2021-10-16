@@ -2,6 +2,7 @@ import { Usuario } from "../../interfaces/index";
 type AuthAction =
   | { type: "Login"; payload: Usuario }
   | { type: "Actualizar"; payload: Usuario }
+  | { type: "ActualizarFoto"; payload: string }
   | { type: "notAuthenticated" }
   | { type: "logOut" };
 
@@ -26,6 +27,11 @@ export const AuthReducer = (
         correo,
         foto,
         status: "authenticated",
+      };
+    case "ActualizarFoto":
+      return {
+        ...state,
+        foto: action.payload,
       };
     case "notAuthenticated":
     case "logOut":

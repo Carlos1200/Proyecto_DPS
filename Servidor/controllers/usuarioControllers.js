@@ -141,26 +141,6 @@ actualizarUsuario=async(req,res,next)=>{
             const salt = bcryptjs.genSaltSync(10);
             req.body.password = bcryptjs.hashSync( password, salt );
         }
-
-        //Verificar si hay imagen que cambiar
-        if(!req.files){
-            req.body.foto=existeUsuario.foto;
-        }else{
-
-           if(existeUsuario.foto){
-                //Limpiar Imagen previa
-                const nombreArr = existeUsuario.foto.split('/');
-                const nombre    = nombreArr[ nombreArr.length - 1 ];
-                const [ public_id ] = nombre.split('.');
-                await cloudinary.uploader.destroy( public_id );
-           }
-
-            //subir nueva imagen
-            const { tempFilePath } = req.files.archivo
-            const { secure_url } = await cloudinary.uploader.upload( tempFilePath );
-            req.body.foto = secure_url;
-
-        }
         
         const usuario=await Usuario.findOneAndUpdate({_id:existeUsuario._id},req.body,{
             new:true

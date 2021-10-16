@@ -13,6 +13,12 @@ module.exports = () => {
         validarJWT,
         validarArchivoSubir
     ],subirImagen);
+    router.put('/usuario/:id',[
+        validarJWT,
+        param('id',"El id no es válido").isMongoId(),
+        validarCampos,
+        validarArchivoSubir
+    ],actualizarImagenUsuario);
 
     return router;
 } 
