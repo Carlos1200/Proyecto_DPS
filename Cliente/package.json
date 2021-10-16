@@ -11,6 +11,7 @@
     "expo": "~42.0.0",
     "expo-google-app-auth": "^8.2.2",
     "expo-google-sign-in": "~9.2.1",
+    "expo-image-picker": "~10.2.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^7.14.2",

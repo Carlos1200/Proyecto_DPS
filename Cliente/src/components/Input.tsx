@@ -11,8 +11,16 @@ import { TextInput, Text, StyleProp, ViewStyle } from "react-native";
 interface Props {
   control: Control<any, object>;
 
-  name: "correo" | "password" | "nombre" | "apellido" | 
-  "producto" | "year" | "precio" | "creador" | "existencia" | "foto";
+  name:
+    | "correo"
+    | "password"
+    | "nombre"
+    | "apellido"
+    | "producto"
+    | "informacion"
+    | "year"
+    | "precio"
+    | "existencia";
 
   style?: StyleProp<ViewStyle>;
 }
@@ -27,12 +35,18 @@ export const Input = ({ control, name, style }: Props) => {
           onBlur={onBlur}
           onChangeText={onChange}
           value={value}
+          multiline={name === "informacion" ? true : false}
           secureTextEntry={name === "password" ? true : false}
-          keyboardType={name === "correo" ? "email-address" : "default"}
+          keyboardType={
+            name === "correo"
+              ? "email-address"
+              : name === "year" || name === "precio" || name === "existencia"
+              ? "numeric"
+              : "default"
+          }
         />
       )}
       name={name}
-
     />
   );
 };
