@@ -20,13 +20,14 @@ module.exports = () => {
       validarJWT,
       check("nombre", "El nombre es obligatorio").notEmpty(),
       check("year", "El año es obligatorio").notEmpty(),
+      check("foto", "La foto referente al producto es obligatoria").notEmpty(),
       check("year", "El año debe de ser válido").isInt(),
       check("precio", "El precio es obligatorio").notEmpty(),
       check("precio", "El precio debe de tener formato correcto").isDecimal(),
       check('existencia',"La existencia es obligatoria").notEmpty(),
       check('existencia',"La existencia debe de ser válido").isInt(),
       validarCampos,
-      validarArchivoSubir,
+      // validarArchivoSubir,
     ],
     nuevoProducto
   );

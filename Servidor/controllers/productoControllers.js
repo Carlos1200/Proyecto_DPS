@@ -20,11 +20,11 @@ nuevoProducto=async(req,res,next)=>{
 
         const producto = new Producto(req.body);
 
-        if(req.files.archivo){
-            const { tempFilePath } = req.files.archivo
-            const { secure_url } = await cloudinary.uploader.upload( tempFilePath );
-            producto.foto = secure_url;
-        }
+        // if(req.files.archivo){
+        //     const { tempFilePath } = req.files.archivo
+        //     const { secure_url } = await cloudinary.uploader.upload( tempFilePath );
+        //     producto.foto = secure_url;
+        // }
 
         await producto.save();
 

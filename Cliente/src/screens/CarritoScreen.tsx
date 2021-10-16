@@ -14,6 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import Api from "../api";
 import { Input } from "../components/Input";
+
 import { ThemeContext } from "../context/theme/ThemeContext";
 import { Producto, ProductosResponse } from "../interfaces";
 import { FlatList } from "react-native-gesture-handler";
@@ -57,7 +58,7 @@ export const CarritoScreen = () => {
       <View style={styles.titlebox}>
         <View>
           <Text style={[styles.title, { color: text }]}>Twist and Wine</Text>
-          <Text style={[styles.subtitle, { color: text , textAlign:'center'}]}>
+          <Text style={[styles.subtitle, { color: text, textAlign: "center" }]}>
             Carrito de compras
           </Text>
         </View>
@@ -70,7 +71,8 @@ export const CarritoScreen = () => {
           }
         />
       </View>
-      <View style={{ margin:10 }}>
+
+      <View style={{ margin: 10 }}>
         <FlatList
           data={productos}
           keyExtractor={(item) => item._id}

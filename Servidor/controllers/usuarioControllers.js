@@ -1,10 +1,7 @@
 const Usuario=require('../models/Usuario');
 const bcryptjs = require('bcryptjs');
-<<<<<<< HEAD
-const {generarJWT,googleVerify} =require('../helpers');
-=======
 const {generarJWT} =require('../helpers');
->>>>>>> 8caf1963cb452acb00cae91716a371fe00b0e544
+const {generarJWT,googleVerify} =require('../helpers');
 require("dotenv").config({ path: "variables.env" });
 
 const cloudinary =require('cloudinary').v2;
@@ -85,7 +82,6 @@ logIn=async(req,res,next)=>{
     }
 }
 
-<<<<<<< HEAD
 loginGoogle=async(req,res,next)=>{
  const {idToken}=req.body;
  try {
@@ -115,9 +111,6 @@ loginGoogle=async(req,res,next)=>{
     next();
  }
 }
-
-=======
->>>>>>> 8caf1963cb452acb00cae91716a371fe00b0e544
 actualizarUsuario=async(req,res,next)=>{
     const {correo,password}=req.body;
 
@@ -148,26 +141,6 @@ actualizarUsuario=async(req,res,next)=>{
             const salt = bcryptjs.genSaltSync(10);
             req.body.password = bcryptjs.hashSync( password, salt );
         }
-
-        //Verificar si hay imagen que cambiar
-        if(!req.files){
-            req.body.foto=existeUsuario.foto;
-        }else{
-
-           if(existeUsuario.foto){
-                //Limpiar Imagen previa
-                const nombreArr = existeUsuario.foto.split('/');
-                const nombre    = nombreArr[ nombreArr.length - 1 ];
-                const [ public_id ] = nombre.split('.');
-                await cloudinary.uploader.destroy( public_id );
-           }
-
-            //subir nueva imagen
-            const { tempFilePath } = req.files.archivo
-            const { secure_url } = await cloudinary.uploader.upload( tempFilePath );
-            req.body.foto = secure_url;
-
-        }
         
         const usuario=await Usuario.findOneAndUpdate({_id:existeUsuario._id},req.body,{
             new:true
@@ -188,13 +161,7 @@ obtenerUsuario=async(req,res,next)=>{
 module.exports={
     nuevoUsuario,
     logIn,
-<<<<<<< HEAD
     loginGoogle,
     actualizarUsuario,
     obtenerUsuario,
-    
-=======
-    actualizarUsuario,
-    obtenerUsuario
->>>>>>> 8caf1963cb452acb00cae91716a371fe00b0e544
 }

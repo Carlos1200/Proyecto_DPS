@@ -18,6 +18,7 @@ import { ThemeContext } from "../context/theme/ThemeContext";
 import { Producto, ProductosResponse } from "../interfaces";
 import { FlatList } from "react-native-gesture-handler";
 import { ProductCard } from "../components/ProductCard";
+import { ProductContext } from "../context/product/ProductContext";
 
 const { width } = Dimensions.get("window");
 
@@ -29,24 +30,18 @@ export const HomeScreen = () => {
     },
   } = useContext(ThemeContext);
 
-  const [productos, setProductos] = useState<Producto[]>();
-  const [refreshing, setRefreshing] = useState(false);
+  const { productos } = useContext(ProductContext);
 
-  const ObtenerProductos = async () => {
-    const { data } = await Api.get<ProductosResponse>("/producto");
-    setProductos(data.productos);
-  };
+  // const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = () => { 
-    setRefreshing(true);
+  // const onRefresh = () => {
+  //   setRefreshing(true);
+  //   setTimeout(() => {
+  //     ObtenerProductos();
+  //   }, 1500);
 
-    ObtenerProductos();
-    setRefreshing(false);
-  };
-
-  useEffect(() => {
-    ObtenerProductos();
-  }, []);
+  //   setRefreshing(false);
+  // };
 
   return (
     <SafeAreaView
@@ -85,16 +80,6 @@ export const HomeScreen = () => {
       </View>
       <View style={{ flex: 1, alignSelf: "center" }}>
         <FlatList
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={() => onRefresh()}
-              enabled={true}
-              progressBackgroundColor={primary}
-            />
-          }
-          refreshing={refreshing}
-          onRefresh={() => onRefresh()}
           data={productos}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => <ProductCard producto={item} />}

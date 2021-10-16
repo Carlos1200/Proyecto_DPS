@@ -31,8 +31,8 @@ export const ProductCard = ({ producto }: Props) => {
         <Image source={{ uri: foto }} style={styles.picture} />
       </View>
       <View>
-        <Text style={[styles.nombre, { color: text }]}>{nombre}</Text>
-        <Text style={[styles.nombre, { color: text }]}>{year}</Text>
+        <Text style={[styles.nombre]}>{nombre}</Text>
+        <Text style={[styles.nombre]}>{year}</Text>
         <Text style={[styles.precio, { color: primary }]}>$ {precio}</Text>
       </View>
     </View>
@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 5,
     marginLeft: 10,
+    color: "white",
   },
   precio: {
     textAlign: "right",

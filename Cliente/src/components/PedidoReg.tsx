@@ -7,16 +7,16 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
-
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { ThemeContext } from "../context/theme/ThemeContext";
-import { Producto } from "../interfaces";
+import { FlatList } from "react-native-gesture-handler";
+import { Pedido } from "../interfaces";
+import { Producto } from "../interfaces"
 
 interface Props {
-  producto: Producto;
+  pedido: Pedido;
 }
 
-export const CarritoCard = ({ producto }: Props) => {
+export const PedidoReg = ({ pedido }: Props) => {
   const {
     theme: {
       colors: { text, background, primary },
@@ -24,22 +24,22 @@ export const CarritoCard = ({ producto }: Props) => {
     },
   } = useContext(ThemeContext);
 
-  const { _id, informacion, nombre, year, precio, creador, existencia, foto } =
-    producto;
+  const { _id, estado, creado, cantidad, total, comprador, producto } =
+    pedido;
 
   return (
-    <View style={styles.cardExt}>
-      <View style={styles.cardInt}>
-        <Image source={{ uri: foto }} style={styles.picture} />
-      </View>
+    <View style={styles.cardExt}>      
       <View style={styles.centro}>
-        <Text style={[styles.nombre, { color: text }]}>{nombre}</Text>
-        <Text style={[styles.nombre, { color: text }]}>{year}</Text>
-        <Text style={[styles.precio, { color: primary }]}>$ {precio}</Text>
-      </View>
-      <TouchableOpacity>
-        <Text style={[styles.eliminar, { color: primary }]}>X</Text>
-      </TouchableOpacity>
+        <Text style={[styles.nombre, { color: text }]}>{_id}</Text>
+        <Text style={[styles.nombre, { color: text }]}>{estado}</Text>
+        <Text style={[styles.precio, { color: primary }]}>$ {total}</Text>
+        <FlatList
+          data={producto}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => <Text style={[styles.precio, { color: text }]} >{item.nombre}: ${item.precio}</Text>}          
+          showsVerticalScrollIndicator={false}          
+        />
+      </View>      
     </View>
   );
 };
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   centro: {
-    width: "60%",
+    width:'60%'
   },
   picture: {
     height: 70,
@@ -78,17 +78,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontSize: 20,
     marginRight: 30,
-    marginBottom: 10,
+    marginBottom:10,
     fontWeight: "bold",
-  },
-  eliminar: {
-    // backgroundColor:'#5A6978',
-    borderRadius: 10,
-    marginLeft: 5,
-    padding: 5,
-    textAlign: "right",
-    fontSize: 18,
-    marginRight: 5,
-    fontWeight: "bold",
-  },
+  }  
 });

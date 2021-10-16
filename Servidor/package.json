@@ -17,10 +17,7 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
     "express-validator": "^6.12.1",
-<<<<<<< HEAD
     "google-auth-library": "^7.10.0",
-=======
->>>>>>> 8caf1963cb452acb00cae91716a371fe00b0e544
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.7",
     "uuid": "^8.3.2"
