@@ -1,4 +1,3 @@
-
 import React, { useContext, useEffect, useState } from "react";
 import {
   Text,
@@ -61,7 +60,6 @@ export const CarritoScreen = () => {
           <Text style={[styles.title, { color: text }]}>Twist and Wine</Text>
           <Text style={[styles.subtitle, { color: text, textAlign: "center" }]}>
             Carrito de compras
-
           </Text>
         </View>
         <Image
@@ -85,7 +83,6 @@ export const CarritoScreen = () => {
         />
       </View>
     </SafeAreaView>
-
   );
 };
 
@@ -107,7 +104,6 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 20,
-
   },
   filterbox: {
     marginTop: 20,
@@ -131,4 +127,3 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
 });
-

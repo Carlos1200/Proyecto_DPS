@@ -10,7 +10,6 @@ import { TextInput, Text, StyleProp, ViewStyle } from "react-native";
 
 interface Props {
   control: Control<any, object>;
-
   name:
     | "correo"
     | "password"
@@ -21,7 +20,6 @@ interface Props {
     | "year"
     | "precio"
     | "existencia";
-
   style?: StyleProp<ViewStyle>;
 }
 

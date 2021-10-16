@@ -10,7 +10,7 @@ export const OrdenesScreen = () => {
   } = useContext(ThemeContext);
   return (
     <View>
-      <Text style={{ color: text }}>Tus Pedidos</Text>
+      <Text style={{ color: text }}>Listado de órdenes</Text>
     </View>
   );
 };
