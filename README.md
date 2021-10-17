@@ -31,5 +31,6 @@ Este proyecto tiene un propósito enteramente académico, trabajado para la mate
 - **Link Trello:** [Link](https://trello.com/areadetrabajo33)
 - **Link Mock Ups en Marvel:** [Link](https://marvelapp.com/prototype/769a5dc)
 - **Link Mock Ups en un documento:** [Link](https://docs.google.com/document/d/1GS7EVeHEXK1HaA_yozrDsA6mtAx5gh-9/edit?usp=sharing&ouid=107684904107417675018&rtpof=true&sd=true)
+- **Link Video Demostrativo de Funcionalidad:** [Link](https://drive.google.com/file/d/1OCc_etTsIA8TRJRz_fdE7WRj34v15L5U/view?usp=sharing)
 - **Link Documentación API:** [Link](https://documenter.getpostman.com/view/13313932/TzzEmtwz)
 - **Link Documento PDF:** [Link](https://docs.google.com/document/d/1OVqtw6rUYAy1D7VA1iC7TNK9x9op055V/edit?usp=sharing&ouid=107684904107417675018&rtpof=true&sd=true)
