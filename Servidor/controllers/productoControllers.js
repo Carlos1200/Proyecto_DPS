@@ -138,6 +138,19 @@ obtenerProductos=async(req,res,next)=>{
     }
 }
 
+obtenerMisProductos=async(req,res,next)=>{
+    const {id}=req.usuario;
+    try {
+        const idUsuario = require('mongoose').Types.ObjectId(id);
+
+        const productos=await Producto.find({creador:idUsuario});
+    res.json({productos});
+    } catch (error) {
+        res.json({msg:"No se pudo obtener los productos"});
+        next();
+    }
+}
+
 obtenerProducto=async(req,res,next)=>{
     const {id}=req.params;
 
@@ -185,6 +198,7 @@ module.exports={
     actualizarProducto,
     eliminarProducto,
     obtenerProductos,
+    obtenerMisProductos,
     obtenerProducto,
     obtenerProductoYear,
     obtenerProductosNombre

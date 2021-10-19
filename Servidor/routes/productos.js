@@ -8,10 +8,11 @@ const {
   obtenerProducto,
   obtenerProductoYear,
   obtenerProductosNombre,
+  obtenerMisProductos
 } = require("../controllers/productoControllers");
 const router = express.Router();
 
-const { validarCampos, validarJWT,validarArchivoSubir } = require("../middlewares");
+const { validarCampos, validarJWT } = require("../middlewares");
 
 module.exports = () => {
   router.post(
@@ -56,6 +57,8 @@ module.exports = () => {
   ], eliminarProducto);
 
   router.get('/',obtenerProductos);
+
+  router.get('/propios',validarJWT,obtenerMisProductos);
 
   router.get('/:id',[
     validarJWT,
