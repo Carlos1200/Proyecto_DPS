@@ -13,7 +13,10 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
 import { ThemeContext } from "../context/theme/ThemeContext";
+import { Ionicons } from "@expo/vector-icons";
+import { useForm } from "react-hook-form";
 
+import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AuthContext } from "../context/auth/AuthContext";
 import { Input } from "../components/Input";
@@ -224,7 +227,6 @@ const styles = StyleSheet.create({
   titleName: {
     fontSize: 30,
     fontWeight: "bold",
-
     paddingHorizontal: 5,
   },
   imageContainer: {
@@ -258,7 +260,6 @@ const styles = StyleSheet.create({
     borderLeftColor: "red",
     paddingLeft: 5,
   },
-
   buttonBox: {
     display: "flex",
     flexDirection: "column",

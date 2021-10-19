@@ -8,7 +8,6 @@ import {
   Dimensions,
   TouchableOpacity,
   Platform,
-
 } from "react-native";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -114,7 +113,6 @@ export const LoginScreen = ({ navigation }: Props) => {
           </View>
           <Btn title='Ingresar' onpress={handleSubmit(onSubmit)} />
           {Platform.OS !== "web" && <BtnGoogle color={primary} />}
-
         </View>
         <View style={styles.info}>
           <Text style={{ color: text }}>¿No tienes cuenta?</Text>

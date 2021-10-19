@@ -7,6 +7,7 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
+
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ThemeContext } from "../context/theme/ThemeContext";
 import { Producto } from "../interfaces";
