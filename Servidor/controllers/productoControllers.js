@@ -56,24 +56,6 @@ actualizarProducto=async(req,res,next)=>{
             })
         };
 
-        //Verificar si hay imagen que cambiar
-        if(!req.files){
-            req.body.foto=existeProducto.foto;
-        }else{
-
-            //Limpiar Imagen previa
-            const nombreArr = existeProducto.foto.split('/');
-            const nombre    = nombreArr[ nombreArr.length - 1 ];
-            const [ public_id ] = nombre.split('.');
-            await cloudinary.uploader.destroy( public_id );
-
-            //subir nueva imagen
-            const { tempFilePath } = req.files.archivo
-            const { secure_url } = await cloudinary.uploader.upload( tempFilePath );
-            req.body.foto = secure_url;
-
-        }
-
         //Actualizar producto
         const producto=await Producto.findOneAndUpdate({_id:req.params.id},req.body,{
             new:true

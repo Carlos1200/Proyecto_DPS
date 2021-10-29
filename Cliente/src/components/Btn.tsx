@@ -11,7 +11,7 @@ import { ThemeContext } from "../context/theme/ThemeContext";
 interface Props {
   title: string;
   style?: StyleProp<ViewStyle>;
-  onpress: (e?: BaseSyntheticEvent<object, any, any>) => Promise<void>;
+  onpress: any;
 }
 
 export const Btn = ({ title, style, onpress }: Props) => {

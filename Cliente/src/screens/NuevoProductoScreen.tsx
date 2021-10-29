@@ -11,7 +11,6 @@ import {
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { StackScreenProps } from "@react-navigation/stack";
 import * as ImagePicker from "expo-image-picker";
 import { ThemeContext } from "../context/theme/ThemeContext";
 import { Header } from "../components/Header";
@@ -21,9 +20,12 @@ import Api from "../api/index";
 import { Producto } from "../interfaces";
 import { AuthContext } from "../context/auth/AuthContext";
 import { ProductContext } from "../context/product/ProductContext";
+import { DrawerScreenProps } from "@react-navigation/drawer";
+import { RootDrawerParams } from "../navigator/DrawerNavigation";
 
 const { width } = Dimensions.get("window");
-interface Props extends StackScreenProps<any, any> {}
+interface Props
+  extends DrawerScreenProps<RootDrawerParams, "NuevoProductoScreen"> {}
 
 interface NewProduct {
   producto: string;
@@ -60,7 +62,7 @@ const schema = yup.object().shape({
   foto: yup.string().required("La foto es requerida").min(1, "Campo no válido"),
 });
 
-export const NuevoProductoScreen = ({ navigation }: Props) => {
+export const NuevoProductoScreen = ({ navigation, route }: Props) => {
   const {
     theme: {
       colors: { text, primary, background },
@@ -87,6 +89,12 @@ export const NuevoProductoScreen = ({ navigation }: Props) => {
     })();
   }, []);
 
+  const { params } = route;
+
+  useEffect(() => {
+    setImage(params ? params.producto.foto : "");
+  }, []);
+
   const {
     control,
     handleSubmit,
@@ -95,19 +103,25 @@ export const NuevoProductoScreen = ({ navigation }: Props) => {
     formState: { errors },
   } = useForm<NewProduct>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      foto: params ? params.producto.foto : "",
+    },
   });
 
   const pickImage = async () => {
     let result: any = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: false,
+      base64: false,
       aspect: [4, 3],
       quality: 1,
     });
 
     if (!result.cancelled) {
+      console.log(result);
+
       const file: any = {
-        uri: result.uri,
+        uri: Platform.OS === "web" ? result.uri.split(",")[1] : result.uri,
         type: "image/jpeg",
         name: "Imagen 1",
       };
@@ -115,9 +129,20 @@ export const NuevoProductoScreen = ({ navigation }: Props) => {
       const formData = new FormData();
       formData.append("archivo", file);
       try {
-        const { data } = await Api.post("/upload", formData);
-        setValue("foto", data.url);
-        setImage(data.url);
+        let resp;
+        if (params) {
+          const { data } = await Api.put(
+            `/upload/producto/${params.producto._id}`,
+            formData
+          );
+          resp = data;
+        } else {
+          const { data } = await Api.post("/upload", formData);
+          resp = data;
+        }
+
+        setValue("foto", resp.foto);
+        setImage(resp.foto);
       } catch (error) {
         console.log(error.response.data.msg);
       }
@@ -162,12 +187,46 @@ export const NuevoProductoScreen = ({ navigation }: Props) => {
       }, 3000);
     }
   };
+
+  const editSubmit = async ({
+    producto,
+    informacion,
+    year,
+    precio,
+    existencia,
+  }: NewProduct) => {
+    try {
+      const { data } = await Api.put(`/producto/${params.producto._id}`, {
+        nombre: producto,
+        informacion,
+        year,
+        precio,
+        existencia,
+      });
+      ActualizarProductos(data.producto);
+      reset({
+        producto: "",
+        year: "",
+        informacion: "",
+        precio: null,
+        existencia: null,
+        foto: "",
+      });
+
+      navigation.navigate("Inicio");
+    } catch (error) {
+      setError(error.response.data.msg);
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
+    }
+  };
   return (
     <ScrollView style={{ flex: 1 }}>
       <View style={{ flex: 1, backgroundColor: primary }}>
-        <Header title='Nuevo Producto' />
+        <Header title={params ? "Editar Producto" : "Nuevo Producto"} />
         <View style={[styles.contenedorForm, { backgroundColor: background }]}>
-          {error && (
+          {error ? (
             <Text
               style={{
                 textAlign: "center",
@@ -177,11 +236,16 @@ export const NuevoProductoScreen = ({ navigation }: Props) => {
               }}>
               {error}
             </Text>
-          )}
+          ) : null}
           <View style={styles.form}>
             <View style={{ marginTop: 30 }}>
               <Text style={[styles.label, { color: text }]}>Nombre</Text>
-              <Input control={control} name='producto' style={styles.input} />
+              <Input
+                control={control}
+                name='producto'
+                style={styles.input}
+                valueDefault={params ? params.producto.nombre : ""}
+              />
               {errors.producto && (
                 <Text style={styles.error}>{errors.producto.message}</Text>
               )}
@@ -192,6 +256,7 @@ export const NuevoProductoScreen = ({ navigation }: Props) => {
                 control={control}
                 name='informacion'
                 style={[styles.input, { height: 90 }]}
+                valueDefault={params ? params.producto.informacion : ""}
               />
               {errors.informacion && (
                 <Text style={styles.error}>{errors.informacion.message}</Text>
@@ -200,14 +265,24 @@ export const NuevoProductoScreen = ({ navigation }: Props) => {
             <View style={styles.inputgroup}>
               <View style={{ marginTop: 30, width: "30%", marginRight: "5%" }}>
                 <Text style={[styles.label, { color: text }]}>Año</Text>
-                <Input control={control} name='year' style={styles.input} />
+                <Input
+                  control={control}
+                  name='year'
+                  style={styles.input}
+                  valueDefault={params ? params.producto.year : ""}
+                />
                 {errors.year && (
                   <Text style={styles.error}>{errors.year.message}</Text>
                 )}
               </View>
               <View style={{ marginTop: 30, width: "30%", marginRight: "5%" }}>
                 <Text style={[styles.label, { color: text }]}>Precio</Text>
-                <Input control={control} name='precio' style={styles.input} />
+                <Input
+                  control={control}
+                  name='precio'
+                  style={styles.input}
+                  valueDefault={params ? params.producto.precio.toString() : ""}
+                />
                 {errors.precio && (
                   <Text style={styles.error}>{errors.precio.message}</Text>
                 )}
@@ -218,6 +293,9 @@ export const NuevoProductoScreen = ({ navigation }: Props) => {
                   control={control}
                   name='existencia'
                   style={styles.input}
+                  valueDefault={
+                    params ? params.producto.existencia.toString() : ""
+                  }
                 />
                 {errors.existencia && (
                   <Text style={styles.error}>{errors.existencia.message}</Text>
@@ -229,15 +307,18 @@ export const NuevoProductoScreen = ({ navigation }: Props) => {
               {errors.foto && (
                 <Text style={styles.error}>{errors.foto.message}</Text>
               )}
-              {image && (
+              {image ? (
                 <Image
                   source={{ uri: image }}
                   style={{ width: 200, height: 200, alignSelf: "center" }}
                 />
-              )}
+              ) : null}
             </View>
 
-            <Btn title='Agregar producto' onpress={handleSubmit(onSubmit)} />
+            <Btn
+              title={params ? "Editar Producto" : "Agregar producto"}
+              onpress={handleSubmit(params ? editSubmit : onSubmit)}
+            />
           </View>
         </View>
       </View>

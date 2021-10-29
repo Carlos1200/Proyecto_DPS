@@ -1,4 +1,5 @@
 const Usuario = require("../models/Usuario");
+const Producto=require("../models/Producto");
 require("dotenv").config({ path: "variables.env" });
 
 const cloudinary = require("cloudinary").v2;
@@ -56,7 +57,49 @@ actualizarImagenUsuario = async (req, res, next) => {
   }
 };
 
+actualizarImagenProducto=async(req,res,next)=>{
+  try {
+    const existeProducto = await Producto.findById(req.params.id);
+    console.log(existeProducto);
+    //Verificar si el usuario existe
+    if (!existeProducto) {
+      return res.status(400).json({
+        msg: "El producto no existe",
+      });
+    }
+
+    if (existeProducto.foto) {
+      //Limpiar Imagen previa
+      const nombreArr = existeProducto.foto.split("/");
+      const nombre = nombreArr[nombreArr.length - 1];
+      const [public_id] = nombre.split(".");
+      await cloudinary.uploader.destroy(public_id);
+    }
+
+    //subir nueva imagen
+    const { tempFilePath } = req.files.archivo;
+    const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+    existeProducto.foto = secure_url;
+
+    const { foto } = await Producto.findOneAndUpdate(
+      { _id: existeProducto._id },
+      existeProducto,
+      {
+        new: true,
+      }
+    );
+
+    res.json({ foto });
+  } catch (error) {
+    res.json({ msg: "No se pudo subir la imagen del producto" });
+    next();
+  }
+
+
+}
+
 module.exports = {
   subirImagen,
-  actualizarImagenUsuario
+  actualizarImagenUsuario,
+  actualizarImagenProducto
 };
