@@ -1,5 +1,6 @@
 const Usuario=require('../models/Usuario');
 const bcryptjs = require('bcryptjs');
+const {generarJWT} =require('../helpers');
 const {generarJWT,googleVerify} =require('../helpers');
 require("dotenv").config({ path: "variables.env" });
 
@@ -110,7 +111,6 @@ loginGoogle=async(req,res,next)=>{
     next();
  }
 }
-
 actualizarUsuario=async(req,res,next)=>{
     const {correo,password}=req.body;
 
