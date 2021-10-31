@@ -1,12 +1,12 @@
 import React, { createContext, useReducer } from "react";
-import { CartReducer, CartState } from "./CartReducer";
-import { Producto } from "../../interfaces/index";
+import { CartReducer, CartState, ProductCart } from "./CartReducer";
 
 interface CartContextProps {
-  productos: Producto[];
+  productos: ProductCart[];
   total: number;
-  agregarProducto: (producto: Producto) => void;
+  agregarProducto: (producto: ProductCart) => void;
   eliminarProducto: (id: string) => void;
+  reiniciarCarrito: () => void;
 }
 
 export const CartContext = createContext({} as CartContextProps);
@@ -19,7 +19,7 @@ const initialState: CartState = {
 export const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(CartReducer, initialState);
 
-  const agregarProducto = (producto: Producto) => {
+  const agregarProducto = (producto: ProductCart) => {
     dispatch({
       type: "AgregarProducto",
       payload: producto,
@@ -37,6 +37,12 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  const reiniciarCarrito = () => {
+    dispatch({
+      type: "ReiniciarCarrito",
+    });
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -44,6 +50,7 @@ export const CartProvider = ({ children }) => {
         total: state.total,
         agregarProducto,
         eliminarProducto,
+        reiniciarCarrito,
       }}>
       {children}
     </CartContext.Provider>

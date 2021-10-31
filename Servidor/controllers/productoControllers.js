@@ -20,12 +20,6 @@ nuevoProducto=async(req,res,next)=>{
 
         const producto = new Producto(req.body);
 
-        // if(req.files.archivo){
-        //     const { tempFilePath } = req.files.archivo
-        //     const { secure_url } = await cloudinary.uploader.upload( tempFilePath );
-        //     producto.foto = secure_url;
-        // }
-
         await producto.save();
 
         res.json({producto});
@@ -171,7 +165,9 @@ obtenerProductosNombre=async(req,res,next)=>{
         const productos=await Producto.find({nombre:{$regex:nombre,$options:'i'}});
         res.json({productos});
     } catch (error) {
-        
+        console.log(error);
+        res.json({msg:"No se pudo obtener los productos por nombre"});
+        next();
     }
 }
 

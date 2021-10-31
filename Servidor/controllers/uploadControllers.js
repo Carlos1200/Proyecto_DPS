@@ -60,7 +60,6 @@ actualizarImagenUsuario = async (req, res, next) => {
 actualizarImagenProducto=async(req,res,next)=>{
   try {
     const existeProducto = await Producto.findById(req.params.id);
-    console.log(existeProducto);
     //Verificar si el usuario existe
     if (!existeProducto) {
       return res.status(400).json({

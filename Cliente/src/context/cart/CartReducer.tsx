@@ -1,10 +1,15 @@
 import { Producto } from "../../interfaces/index";
 type CartAction =
-  | { type: "AgregarProducto"; payload: Producto }
-  | { type: "EliminarProducto"; payload: Producto[] };
+  | { type: "AgregarProducto"; payload: ProductCart }
+  | { type: "EliminarProducto"; payload: ProductCart[] }
+  | { type: "ReiniciarCarrito" };
+
+export interface ProductCart extends Producto {
+  cantidad: number;
+}
 
 export interface CartState {
-  productos: Producto[];
+  productos: ProductCart[];
   total: number;
 }
 
@@ -17,11 +22,19 @@ export const CartReducer = (
       return {
         ...state,
         productos: [...state.productos, action.payload],
+        total: state.total,
       };
     case "EliminarProducto":
       return {
         ...state,
         productos: action.payload,
+        total: state.total,
+      };
+    case "ReiniciarCarrito":
+      return {
+        ...state,
+        productos: [],
+        total: 0,
       };
     default:
       return state;

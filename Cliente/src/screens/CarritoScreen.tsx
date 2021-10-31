@@ -19,6 +19,7 @@ import { ThemeContext } from "../context/theme/ThemeContext";
 import { Producto, ProductosResponse } from "../interfaces";
 import { FlatList } from "react-native-gesture-handler";
 import { CarritoCard } from "../components/CarritoCard";
+import { CartContext } from "../context/cart/CartContext";
 
 const { width } = Dimensions.get("window");
 
@@ -30,24 +31,27 @@ export const CarritoScreen = () => {
     },
   } = useContext(ThemeContext);
 
-  const [productos, setProductos] = useState<Producto[]>();
+  const { eliminarProducto, reiniciarCarrito, productos } =
+    useContext(CartContext);
+
+  // const [productos, setProductos] = useState<Producto[]>();
   const [refreshing, setRefreshing] = useState(false);
 
-  const ObtenerProductos = async () => {
-    const { data } = await Api.get<ProductosResponse>("/producto");
-    setProductos(data.productos);
-  };
+  // const ObtenerProductos = async () => {
+  //   const { data } = await Api.get<ProductosResponse>("/producto");
+  //   setProductos(data.productos);
+  // };
 
-  const onRefresh = () => {
-    setRefreshing(true);
+  // const onRefresh = () => {
+  //   setRefreshing(true);
 
-    ObtenerProductos();
-    setRefreshing(false);
-  };
+  //   ObtenerProductos();
+  //   setRefreshing(false);
+  // };
 
-  useEffect(() => {
-    ObtenerProductos();
-  }, []);
+  // useEffect(() => {
+  //   ObtenerProductos();
+  // }, []);
 
   return (
     <SafeAreaView

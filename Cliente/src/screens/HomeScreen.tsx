@@ -4,14 +4,11 @@ import {
   View,
   StyleSheet,
   Image,
-  TextInput,
   Dimensions,
   SafeAreaView,
   StatusBar,
-  RefreshControl,
   Platform,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { FlatList } from "react-native-gesture-handler";
 import { Portal, PortalHost } from "@gorhom/portal";
@@ -21,39 +18,30 @@ import { ProductContext } from "../context/product/ProductContext";
 import { Producto } from "../interfaces";
 import Modal from "../components/Modal";
 import ProductDetail from "../components/ProductDetail";
+import SearchBox from "../components/SearchBox";
+import Filter from "../components/Filter";
 
 const { width } = Dimensions.get("window");
 
 export const HomeScreen = () => {
   const {
     theme: {
-      colors: { text, background, primary },
+      colors: { text, background },
       dark,
     },
   } = useContext(ThemeContext);
 
   const { productos } = useContext(ProductContext);
 
-  const [producto, setProducto] = useState<Producto>();
+  const [producto, setProducto] = useState<Producto>(null);
+  const [filter, setFilter] = useState(false);
+  const [tipo, setTipo] = useState("nombre");
 
   const bottomSheetRef = useRef<BottomSheet>(null);
   const openModal = (productoRef: Producto) => {
     setProducto(productoRef);
     bottomSheetRef.current.expand();
   };
-
-  //TODO refresh control
-  // const [refreshing, setRefreshing] = useState(false);
-
-  // const onRefresh = () => {
-  //   setRefreshing(true);
-  //   setTimeout(() => {
-  //     ObtenerProductos();
-  //   }, 1500);
-
-  //   setRefreshing(false);
-  // };
-
   return (
     <>
       <SafeAreaView
@@ -77,25 +65,7 @@ export const HomeScreen = () => {
             }
           />
         </View>
-        <View style={styles.filterbox}>
-          <Ionicons
-            name='search'
-            color={primary}
-            style={[
-              styles.icons,
-              { position: "absolute", bottom: 1, left: 6, zIndex: 9999 },
-            ]}
-          />
-          <TextInput style={styles.filter} placeholder='Buscar' />
-          <Ionicons
-            name='options'
-            color={primary}
-            style={[
-              styles.icons,
-              { position: "absolute", bottom: 1, right: 6 },
-            ]}
-          />
-        </View>
+        <SearchBox setFilter={setFilter} openModal={openModal} tipo={tipo} />
         <View style={{ flex: 1, alignSelf: "center" }}>
           <FlatList
             data={productos}
@@ -110,8 +80,12 @@ export const HomeScreen = () => {
         </View>
         {Platform.OS !== "web" ? (
           <Portal>
-            <Modal referencia={bottomSheetRef}>
-              <ProductDetail producto={producto} />
+            <Modal referencia={bottomSheetRef} setFilter={setFilter}>
+              {filter ? (
+                <Filter setTipo={setTipo} tipo={tipo} />
+              ) : (
+                <ProductDetail producto={producto} />
+              )}
             </Modal>
           </Portal>
         ) : null}
@@ -139,26 +113,5 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 20,
-  },
-  filterbox: {
-    marginTop: 20,
-    width: width >= 1000 ? "50%" : "80%",
-    alignItems: "center",
-    alignSelf: "center",
-    marginBottom: 30,
-  },
-  icons: {
-    fontSize: 30,
-    fontWeight: "bold",
-  },
-  filter: {
-    width: "100%",
-    color: "#000000",
-    backgroundColor: "#FFF",
-    paddingLeft: 70,
-    paddingVertical: 5,
-    marginHorizontal: 40,
-    fontSize: 20,
-    borderRadius: 30,
   },
 });

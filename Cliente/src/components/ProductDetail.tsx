@@ -1,5 +1,5 @@
 import { useBottomSheet } from "@gorhom/bottom-sheet";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { ThemeContext } from "../context/theme/ThemeContext";
@@ -111,7 +111,10 @@ const ProductDetail = ({ producto }: Props) => {
             <Btn
               title='Agregar a Carrito'
               onpress={() => {
-                agregarProducto(producto);
+                agregarProducto({
+                  ...producto,
+                  cantidad,
+                });
                 close();
               }}
             />

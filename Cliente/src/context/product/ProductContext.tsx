@@ -8,6 +8,7 @@ interface ProductContextProps {
   misProductos: Producto[];
   ActualizarProductos: (producto: Producto) => void;
   AgregarMisProductos: (productosMios: Producto[]) => void;
+  buscarProductos: (buscador: string, tipo: string) => Promise<void>;
 }
 
 export const ProductContext = createContext({} as ProductContextProps);
@@ -73,6 +74,20 @@ export const ProductProvider = ({ children }) => {
     });
   };
 
+  const buscarProductos = async (buscador: string, tipo: string) => {
+    if (buscador === "") {
+      ObtenerProductos();
+    } else {
+      const { data } = await Api.get<ProductosResponse>(
+        `/producto/${tipo}/${buscador}`
+      );
+      dispatch({
+        type: "AgregarProductos",
+        payload: data.productos,
+      });
+    }
+  };
+
   return (
     <ProductContext.Provider
       value={{
@@ -80,6 +95,7 @@ export const ProductProvider = ({ children }) => {
         misProductos: state.misProductos,
         ActualizarProductos,
         AgregarMisProductos,
+        buscarProductos,
       }}>
       {children}
     </ProductContext.Provider>
