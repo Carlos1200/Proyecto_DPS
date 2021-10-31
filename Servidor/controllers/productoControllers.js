@@ -20,12 +20,6 @@ nuevoProducto=async(req,res,next)=>{
 
         const producto = new Producto(req.body);
 
-        // if(req.files.archivo){
-        //     const { tempFilePath } = req.files.archivo
-        //     const { secure_url } = await cloudinary.uploader.upload( tempFilePath );
-        //     producto.foto = secure_url;
-        // }
-
         await producto.save();
 
         res.json({producto});
@@ -55,24 +49,6 @@ actualizarProducto=async(req,res,next)=>{
                 msg:'No posee permisos'
             })
         };
-
-        //Verificar si hay imagen que cambiar
-        if(!req.files){
-            req.body.foto=existeProducto.foto;
-        }else{
-
-            //Limpiar Imagen previa
-            const nombreArr = existeProducto.foto.split('/');
-            const nombre    = nombreArr[ nombreArr.length - 1 ];
-            const [ public_id ] = nombre.split('.');
-            await cloudinary.uploader.destroy( public_id );
-
-            //subir nueva imagen
-            const { tempFilePath } = req.files.archivo
-            const { secure_url } = await cloudinary.uploader.upload( tempFilePath );
-            req.body.foto = secure_url;
-
-        }
 
         //Actualizar producto
         const producto=await Producto.findOneAndUpdate({_id:req.params.id},req.body,{
@@ -189,7 +165,9 @@ obtenerProductosNombre=async(req,res,next)=>{
         const productos=await Producto.find({nombre:{$regex:nombre,$options:'i'}});
         res.json({productos});
     } catch (error) {
-        
+        console.log(error);
+        res.json({msg:"No se pudo obtener los productos por nombre"});
+        next();
     }
 }
 

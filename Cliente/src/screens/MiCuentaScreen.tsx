@@ -8,14 +8,9 @@ import {
   Dimensions,
   ScrollView,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
 
 import { ThemeContext } from "../context/theme/ThemeContext";
-import { Ionicons } from "@expo/vector-icons";
 import { useForm } from "react-hook-form";
-
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AuthContext } from "../context/auth/AuthContext";

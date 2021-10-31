@@ -43,6 +43,7 @@ export const DrawerNavigation = () => {
       <Drawer.Screen
         name='NuevoProductoScreen'
         component={NuevoProductoScreen}
+        options={{ unmountOnBlur: true }}
       />
       <Drawer.Screen name='MisProductosScreen' component={MisProductosScreen} />
       <Drawer.Screen name='MisPedidosScreen' component={MisPedidosScreen} />

@@ -1,16 +1,28 @@
 {
-    "expo": {
+  "expo": {
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "userInterfaceStyle": "automatic"
+    },
+    "android": {
       "userInterfaceStyle": "automatic",
-      "ios": {
-        "userInterfaceStyle": "automatic"
-      },
-      "android": {
-        "userInterfaceStyle": "automatic"
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/logoOscuro.png",
+        "backgroundColor": "#232A32"
       }
     },
-    "splash": {
-      "image": "./src/assets/logoOscuro.png",
-      "backgroundColor": "#232A32",
-      "resizeMode": "cover"
-    }
+    "web": {
+      "favicon": "./src/assets/logoOscuro.png"
+    },
+    "name": "Twist&Wine",
+    "slug": "Twist-Wine",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/logoOscuro.png"
+  },
+  "splash": {
+    "image": "./src/assets/logoOscuro.png",
+    "backgroundColor": "#232A32",
+    "resizeMode": "cover"
   }
+}
