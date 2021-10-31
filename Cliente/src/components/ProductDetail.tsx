@@ -25,6 +25,10 @@ const ProductDetail = ({ producto }: Props) => {
 
   const [cantidad, setCantidad] = useState(1);
 
+  useEffect(() => {
+    setCantidad(1);
+  }, [producto]);
+
   return (
     <View style={styles.contenedor}>
       {producto && (

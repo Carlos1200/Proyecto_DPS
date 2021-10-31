@@ -20,9 +20,30 @@ export const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(CartReducer, initialState);
 
   const agregarProducto = (producto: ProductCart) => {
+    let produtosArray = [];
+    const nuevoProducto = state.productos.find(
+      (prod) => prod._id === producto._id
+    );
+    if (nuevoProducto) {
+      produtosArray = state.productos.map((prod) =>
+        prod._id === producto._id
+          ? { ...prod, cantidad: prod.cantidad + producto.cantidad }
+          : prod
+      );
+    } else {
+      produtosArray = [...state.productos, producto];
+    }
+
+    const total = produtosArray.reduce((acumulador, producto) => {
+      return acumulador + producto.precio * producto.cantidad;
+    }, 0);
+
     dispatch({
       type: "AgregarProducto",
-      payload: producto,
+      payload: {
+        producto: produtosArray,
+        total,
+      },
     });
   };
 
@@ -31,9 +52,16 @@ export const CartProvider = ({ children }) => {
       (producto) => producto._id !== id
     );
 
+    const total = nuevosProductos.reduce((acumulador, producto) => {
+      return acumulador + producto.precio * producto.cantidad;
+    }, 0);
+
     dispatch({
       type: "EliminarProducto",
-      payload: nuevosProductos,
+      payload: {
+        productos: nuevosProductos,
+        total,
+      },
     });
   };
 

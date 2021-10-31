@@ -31,27 +31,8 @@ export const CarritoScreen = () => {
     },
   } = useContext(ThemeContext);
 
-  const { eliminarProducto, reiniciarCarrito, productos } =
+  const { eliminarProducto, reiniciarCarrito, productos, total } =
     useContext(CartContext);
-
-  // const [productos, setProductos] = useState<Producto[]>();
-  const [refreshing, setRefreshing] = useState(false);
-
-  // const ObtenerProductos = async () => {
-  //   const { data } = await Api.get<ProductosResponse>("/producto");
-  //   setProductos(data.productos);
-  // };
-
-  // const onRefresh = () => {
-  //   setRefreshing(true);
-
-  //   ObtenerProductos();
-  //   setRefreshing(false);
-  // };
-
-  // useEffect(() => {
-  //   ObtenerProductos();
-  // }, []);
 
   return (
     <SafeAreaView
