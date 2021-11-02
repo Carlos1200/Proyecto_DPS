@@ -8,9 +8,6 @@ import {
   Dimensions,
   ScrollView,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
 
 import { ThemeContext } from "../context/theme/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
@@ -22,10 +19,6 @@ import { AuthContext } from "../context/auth/AuthContext";
 import { Input } from "../components/Input";
 import { Btn } from "../components/Btn";
 
-import { yupResolver } from "@hookform/resolvers/yup";
-import { AuthContext } from "../context/auth/AuthContext";
-import { Input } from "../components/Input";
-import { Btn } from "../components/Btn";
 import * as ImagePicker from "expo-image-picker";
 import Api from "../api";
 import { UsuarioResponse } from "../interfaces/index";
