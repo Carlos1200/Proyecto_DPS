@@ -1,6 +1,27 @@
-import React, { useContext } from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TextInput,
+  Dimensions,
+  SafeAreaView,
+  StatusBar,
+  RefreshControl,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
+import Api from "../api";
+import { Input } from "../components/Input";
+
 import { ThemeContext } from "../context/theme/ThemeContext";
+import { Producto, ProductosResponse } from "../interfaces";
+import { FlatList } from "react-native-gesture-handler";
+import { CarritoCard } from "../components/CarritoCard";
+import { CartContext } from "../context/cart/CartContext";
+
+const { width } = Dimensions.get("window");
 
 export const CarritoScreen = () => {
   const {
@@ -9,13 +30,21 @@ export const CarritoScreen = () => {
       dark,
     },
   } = useContext(ThemeContext);
+
+  const { eliminarProducto, reiniciarCarrito, productos, total } =
+    useContext(CartContext);
+
   return (
-    <>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        marginTop: StatusBar.currentHeight,
+      }}>
       <View style={styles.titlebox}>
         <View>
           <Text style={[styles.title, { color: text }]}>Twist and Wine</Text>
-          <Text style={[styles.subtitle, { color: text }]}>
-            Carrito de compras 
+          <Text style={[styles.subtitle, { color: text, textAlign: "center" }]}>
+            Carrito de compras
           </Text>
         </View>
         <Image
@@ -27,10 +56,18 @@ export const CarritoScreen = () => {
           }
         />
       </View>
-      <View>
-          
+
+      <View style={{ margin: 10 }}>
+        <FlatList
+          data={productos}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => <CarritoCard producto={item} />}
+          //numColumns={width >= 1000 ? 3 : 1}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={() => <View style={{ marginBottom: 100 }} />}
+        />
       </View>
-    </>
+    </SafeAreaView>
   );
 };
 
@@ -52,7 +89,26 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 20,
-    textAlign: "center",
   },
-
-})
+  filterbox: {
+    marginTop: 20,
+    width: width >= 1000 ? "50%" : "80%",
+    alignItems: "center",
+    alignSelf: "center",
+    marginBottom: 30,
+  },
+  icons: {
+    fontSize: 30,
+    fontWeight: "bold",
+  },
+  filter: {
+    width: "100%",
+    color: "#000000",
+    backgroundColor: "#FFF",
+    paddingLeft: 70,
+    paddingVertical: 5,
+    marginHorizontal: 40,
+    fontSize: 20,
+    borderRadius: 30,
+  },
+});

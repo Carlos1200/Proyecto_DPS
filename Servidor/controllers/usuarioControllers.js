@@ -1,6 +1,6 @@
 const Usuario=require('../models/Usuario');
 const bcryptjs = require('bcryptjs');
-const {generarJWT} =require('../helpers');
+const {generarJWT,googleVerify} =require('../helpers');
 require("dotenv").config({ path: "variables.env" });
 
 const cloudinary =require('cloudinary').v2;
@@ -81,6 +81,35 @@ logIn=async(req,res,next)=>{
     }
 }
 
+loginGoogle=async(req,res,next)=>{
+ const {idToken}=req.body;
+ try {
+    const {email,picture,given_name,family_name}=await googleVerify(idToken);
+
+    let usuario = await Usuario.findOne({ correo:email });
+
+    if(!usuario){
+        const data={
+            nombre:given_name,
+            apellido:family_name,
+            correo:email,
+            password:':P',
+            foto:picture,
+        }
+
+        usuario = new Usuario( data );
+        await usuario.save();
+    }
+
+    const token=await generarJWT(usuario);
+
+    res.json({usuario,token});
+    
+ } catch (error) {
+    res.json({msg:"No se pudo iniciar sesión"});
+    next();
+ }
+}
 actualizarUsuario=async(req,res,next)=>{
     const {correo,password}=req.body;
 
@@ -111,26 +140,6 @@ actualizarUsuario=async(req,res,next)=>{
             const salt = bcryptjs.genSaltSync(10);
             req.body.password = bcryptjs.hashSync( password, salt );
         }
-
-        //Verificar si hay imagen que cambiar
-        if(!req.files){
-            req.body.foto=existeUsuario.foto;
-        }else{
-
-           if(existeUsuario.foto){
-                //Limpiar Imagen previa
-                const nombreArr = existeUsuario.foto.split('/');
-                const nombre    = nombreArr[ nombreArr.length - 1 ];
-                const [ public_id ] = nombre.split('.');
-                await cloudinary.uploader.destroy( public_id );
-           }
-
-            //subir nueva imagen
-            const { tempFilePath } = req.files.archivo
-            const { secure_url } = await cloudinary.uploader.upload( tempFilePath );
-            req.body.foto = secure_url;
-
-        }
         
         const usuario=await Usuario.findOneAndUpdate({_id:existeUsuario._id},req.body,{
             new:true
@@ -151,6 +160,7 @@ obtenerUsuario=async(req,res,next)=>{
 module.exports={
     nuevoUsuario,
     logIn,
+    loginGoogle,
     actualizarUsuario,
-    obtenerUsuario
+    obtenerUsuario,
 }

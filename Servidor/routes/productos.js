@@ -8,10 +8,11 @@ const {
   obtenerProducto,
   obtenerProductoYear,
   obtenerProductosNombre,
+  obtenerMisProductos
 } = require("../controllers/productoControllers");
 const router = express.Router();
 
-const { validarCampos, validarJWT,validarArchivoSubir } = require("../middlewares");
+const { validarCampos, validarJWT } = require("../middlewares");
 
 module.exports = () => {
   router.post(
@@ -20,13 +21,14 @@ module.exports = () => {
       validarJWT,
       check("nombre", "El nombre es obligatorio").notEmpty(),
       check("year", "El año es obligatorio").notEmpty(),
+      check("foto", "La foto referente al producto es obligatoria").notEmpty(),
       check("year", "El año debe de ser válido").isInt(),
       check("precio", "El precio es obligatorio").notEmpty(),
       check("precio", "El precio debe de tener formato correcto").isDecimal(),
       check('existencia',"La existencia es obligatoria").notEmpty(),
       check('existencia',"La existencia debe de ser válido").isInt(),
       validarCampos,
-      validarArchivoSubir,
+      // validarArchivoSubir,
     ],
     nuevoProducto
   );
@@ -55,6 +57,8 @@ module.exports = () => {
   ], eliminarProducto);
 
   router.get('/',obtenerProductos);
+
+  router.get('/propios',validarJWT,obtenerMisProductos);
 
   router.get('/:id',[
     validarJWT,

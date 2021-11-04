@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import {
   View,
@@ -6,10 +6,9 @@ import {
   Dimensions,
   Text,
   TouchableOpacity,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+  Keyboard
+} from 'react-native'
 import { ThemeContext } from "../context/theme/ThemeContext";
-const { width } = Dimensions.get("window");
 
 export const BottomTabs = ({ navigation }: BottomTabBarProps) => {
   const {
@@ -18,30 +17,56 @@ export const BottomTabs = ({ navigation }: BottomTabBarProps) => {
     },
   } = useContext(ThemeContext);
 
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        setKeyboardVisible(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={{ alignItems: "center" }}
-        activeOpacity={0.8}
-        onPress={() => navigation.navigate("HomeScreen")}>
-        <Ionicons name='wine-sharp' color={primary} style={styles.icon} />
-        <Text style={styles.text}>Vinos</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{ alignItems: "center" }}
-        activeOpacity={0.8}
-        onPress={() => navigation.navigate("CarritoScreen")}>
-        <Ionicons name='cart' color={primary} style={styles.icon} />
-        <Text style={styles.text}>Carrito</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{ alignItems: "center" }}
-        activeOpacity={0.8}
-        onPress={() => navigation.navigate("OrdenesScreen")}>
-        <Ionicons name='clipboard' color={primary} style={styles.icon} />
-        <Text style={styles.text}>Ordenes</Text>
-      </TouchableOpacity>
-    </View>
+    <>
+      {!isKeyboardVisible && (
+        <View style={styles.container}>
+          <TouchableOpacity
+            style={{ alignItems: "center" }}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("HomeScreen")}>
+            <Ionicons name='wine-sharp' color={primary} style={styles.icon} />
+            <Text style={styles.text}>Vinos</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ alignItems: "center" }}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("CarritoScreen")}>
+            <Ionicons name='cart' color={primary} style={styles.icon} />
+            <Text style={styles.text}>Carrito</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ alignItems: "center" }}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate("OrdenesScreen")}>
+            <Ionicons name='clipboard' color={primary} style={styles.icon} />
+            <Text style={styles.text}>Ordenes</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </>
   );
 };
 const styles = StyleSheet.create({
@@ -55,6 +80,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     position: "absolute",
+  },
+  tabBarContainer: {
+    borderRadius: 25,
   },
   icon: {
     fontSize: 35,

@@ -151,9 +151,41 @@ obtenerPedidos=async(req,res,next)=>{
     }
 }
 
+obtenerPedidosVendedor=async(req,res,next)=>{
+    const {id}=req.usuario;
+    const idVendedor = require('mongoose').Types.ObjectId(id);
+    try {
+
+        const pedidos=await Pedido.aggregate([
+            {
+                $lookup:{
+                    from:'productos',
+                    localField:"idProducto",
+                    foreignField:"_id",
+                    as: "producto"
+                }
+            },
+            {
+                $match:{"producto.creador":idVendedor}
+            },
+            {
+                $project:{
+                    idProducto:0,
+                }
+            },
+        ]);
+        res.json({pedidos});
+    } catch (error) {
+        console.log(error);
+        res.json({msg:"No se pudo obtener los pedidos"});
+        next();
+    }
+}
+
 module.exports={
     nuevoPedido,
     editarEstado,
     eliminarPedido,
-    obtenerPedidos
+    obtenerPedidos,
+    obtenerPedidosVendedor
 }

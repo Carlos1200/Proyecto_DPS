@@ -7,6 +7,7 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -17,6 +18,7 @@ import { Btn } from "../components/Btn";
 import { StackScreenProps } from "@react-navigation/stack";
 import Api from "../api/index";
 import { AuthContext } from "../context/auth/AuthContext";
+import { BtnGoogle } from "../components/BtnGoogle";
 
 const { width } = Dimensions.get("window");
 
@@ -109,6 +111,8 @@ export const LoginScreen = ({ navigation }: Props) => {
               <Text style={styles.error}>{errors.password.message}</Text>
             )}
           </View>
+          <Btn title='Ingresar' onpress={handleSubmit(onSubmit)} />
+          {Platform.OS !== "web" && <BtnGoogle color={primary} />}
         </View>
         <View style={styles.info}>
           <Text style={{ color: text }}>¿No tienes cuenta?</Text>

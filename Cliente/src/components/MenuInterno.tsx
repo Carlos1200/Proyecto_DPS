@@ -63,7 +63,7 @@ export const MenuInterno = ({ navigation }: DrawerContentComponentProps) => {
             color={primary}
             style={{ fontSize: 25, marginLeft: 20 }}
           />
-          <Text style={[styles.textBtn, { color: text }]}>Inicio</Text>
+          <Text style={[styles.textBtn, { color: "white" }]}>Inicio</Text>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
@@ -74,7 +74,9 @@ export const MenuInterno = ({ navigation }: DrawerContentComponentProps) => {
             color={primary}
             style={{ fontSize: 25, marginLeft: 20 }}
           />
-          <Text style={[styles.textBtn, { color: text }]}>Nuevo Producto</Text>
+          <Text style={[styles.textBtn, { color: "white" }]}>
+            Nuevo Producto
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
@@ -85,7 +87,9 @@ export const MenuInterno = ({ navigation }: DrawerContentComponentProps) => {
             color={primary}
             style={{ fontSize: 25, marginLeft: 20 }}
           />
-          <Text style={[styles.textBtn, { color: text }]}>Mis Productos</Text>
+          <Text style={[styles.textBtn, { color: "white" }]}>
+            Mis Productos
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
@@ -96,7 +100,7 @@ export const MenuInterno = ({ navigation }: DrawerContentComponentProps) => {
             color={primary}
             style={{ fontSize: 25, marginLeft: 20 }}
           />
-          <Text style={[styles.textBtn, { color: text }]}>Mis Pedidos</Text>
+          <Text style={[styles.textBtn, { color: "white" }]}>Mis Pedidos</Text>
         </TouchableOpacity>
         <View style={styles.cuenta}>
           <TouchableOpacity
@@ -108,7 +112,7 @@ export const MenuInterno = ({ navigation }: DrawerContentComponentProps) => {
               color={primary}
               style={{ fontSize: 25, marginLeft: 20 }}
             />
-            <Text style={[styles.textBtn, { color: text }]}>Mi Cuenta</Text>
+            <Text style={[styles.textBtn, { color: "white" }]}>Mi Cuenta</Text>
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
@@ -119,7 +123,9 @@ export const MenuInterno = ({ navigation }: DrawerContentComponentProps) => {
               color={primary}
               style={{ fontSize: 25, marginLeft: 20 }}
             />
-            <Text style={[styles.textBtn, { color: text }]}>Cerrar Sesión</Text>
+            <Text style={[styles.textBtn, { color: "white" }]}>
+              Cerrar Sesión
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -7,43 +7,48 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
+
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ThemeContext } from "../context/theme/ThemeContext";
 import { Producto } from "../interfaces";
 
 interface Props {
   producto: Producto;
-  openModal: (productoRef: Producto) => void;
 }
 
-export const ProductCard = ({ producto, openModal }: Props) => {
+export const CarritoCard = ({ producto }: Props) => {
   const {
     theme: {
-      colors: { primary },
+      colors: { text, background, primary },
+      dark,
     },
   } = useContext(ThemeContext);
 
-  const { nombre, year, precio, foto } = producto;
+  const { _id, informacion, nombre, year, precio, creador, existencia, foto } = producto;
 
   return (
-    <TouchableOpacity
-      style={styles.cardExt}
-      activeOpacity={0.8}
-      onPress={() => openModal(producto)}>
+    <View style={styles.cardExt}>
       <View style={styles.cardInt}>
         <Image source={{ uri: foto }} style={styles.picture} />
       </View>
-      <View>
-        <Text style={[styles.nombre]}>{nombre}</Text>
-        <Text style={[styles.nombre]}>{year}</Text>
+      <View style={styles.centro}>
+        <Text style={[styles.nombre, { color: text }]}>{nombre}</Text>
+        <Text style={[styles.nombre, { color: text }]}>{year}</Text>
         <Text style={[styles.precio, { color: primary }]}>$ {precio}</Text>
       </View>
-    </TouchableOpacity>
+      <TouchableOpacity>
+        <Text style={[styles.eliminar, { color: primary }]}>X</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   cardExt: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#343F4B",
     padding: 5,
     margin: 5,
@@ -54,23 +59,35 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 10,
   },
+  centro: {
+    width: "60%",
+  },
   picture: {
-    height: 260,
-    width: 330,
-    alignSelf: "center",
+    height: 70,
+    width: 70,
     resizeMode: "contain",
   },
   nombre: {
     textAlign: "left",
-    fontSize: 20,
+    fontSize: 16,
     marginTop: 5,
     marginLeft: 10,
-    color: "white",
   },
   precio: {
     textAlign: "right",
-    fontSize: 25,
-    marginRight: 10,
+    fontSize: 20,
+    marginRight: 30,
+    marginBottom: 10,
+    fontWeight: "bold",
+  },
+  eliminar: {
+    // backgroundColor:'#5A6978',
+    borderRadius: 10,
+    marginLeft: 5,
+    padding: 5,
+    textAlign: "right",
+    fontSize: 18,
+    marginRight: 5,
     fontWeight: "bold",
   },
 });

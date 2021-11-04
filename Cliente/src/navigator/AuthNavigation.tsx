@@ -13,7 +13,6 @@ export const AuthNavigation = () => {
     auth: { status },
     autenticar,
   } = useContext(AuthContext);
-
   useEffect(() => {
     autenticar();
   }, []);

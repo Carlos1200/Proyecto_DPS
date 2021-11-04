@@ -63,3 +63,5 @@ package-lock.json
 # Expo
 .expo/*
 web-build/
+
+yarn.lock
