@@ -25,7 +25,7 @@ export const CarritoCard = ({ producto, cantidad }: Props) => {
       dark,
     },
   } = useContext(ThemeContext);
-
+  
   const { eliminarProducto, reiniciarCarrito, productos, total } =
     useContext(CartContext); 
 
@@ -33,6 +33,7 @@ export const CarritoCard = ({ producto, cantidad }: Props) => {
   //  producto;
   const { _id, informacion, nombre, year, precio, creador, existencia, foto } =
     producto;
+
 
   return (
     <View style={styles.cardExt}>
