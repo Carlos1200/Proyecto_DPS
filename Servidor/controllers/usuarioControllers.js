@@ -1,5 +1,6 @@
 const Usuario=require('../models/Usuario');
 const bcryptjs = require('bcryptjs');
+const {generarJWT} =require('../helpers');
 const {generarJWT,googleVerify} =require('../helpers');
 require("dotenv").config({ path: "variables.env" });
 

@@ -10,21 +10,30 @@ import {
 
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ThemeContext } from "../context/theme/ThemeContext";
-import { Producto } from "../interfaces";
+import { Pedido, Producto } from "../interfaces";
+import { CartContext } from "../context/cart/CartContext";
 
 interface Props {
   producto: Producto;
+  cantidad: number;
 }
 
-export const CarritoCard = ({ producto }: Props) => {
+export const CarritoCard = ({ producto, cantidad }: Props) => {
   const {
     theme: {
       colors: { text, background, primary },
       dark,
     },
   } = useContext(ThemeContext);
+  
+  const { eliminarProducto, reiniciarCarrito, productos, total } =
+    useContext(CartContext); 
 
-  const { _id, informacion, nombre, year, precio, creador, existencia, foto } = producto;
+  //const { _id, informacion, nombre, year, precio, creador, existencia, foto } =
+  //  producto;
+  const { _id, informacion, nombre, year, precio, creador, existencia, foto } =
+    producto;
+
 
   return (
     <View style={styles.cardExt}>
@@ -34,9 +43,10 @@ export const CarritoCard = ({ producto }: Props) => {
       <View style={styles.centro}>
         <Text style={[styles.nombre, { color: text }]}>{nombre}</Text>
         <Text style={[styles.nombre, { color: text }]}>{year}</Text>
-        <Text style={[styles.precio, { color: primary }]}>$ {precio}</Text>
+        <Text style={[styles.nombre, { color: text }]}>Agregados: {cantidad}</Text>
+        <Text style={[styles.precio, { color: primary }]}>$ {precio*cantidad}</Text>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => eliminarProducto(_id)}>
         <Text style={[styles.eliminar, { color: primary }]}>X</Text>
       </TouchableOpacity>
     </View>

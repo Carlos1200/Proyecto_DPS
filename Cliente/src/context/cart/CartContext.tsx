@@ -7,7 +7,7 @@ interface CartContextProps {
   agregarProducto: (producto: ProductCart) => void;
   eliminarProducto: (id: string) => void;
   reiniciarCarrito: () => void;
-}
+}  
 
 export const CartContext = createContext({} as CartContextProps);
 
