@@ -21,9 +21,10 @@ interface Props {
     | "precio"
     | "existencia";
   style?: StyleProp<ViewStyle>;
+  valueDefault?: any;
 }
 
-export const Input = ({ control, name, style }: Props) => {
+export const Input = ({ control, name, style, valueDefault }: Props) => {
   return (
     <Controller
       control={control}
@@ -45,6 +46,7 @@ export const Input = ({ control, name, style }: Props) => {
         />
       )}
       name={name}
+      defaultValue={valueDefault}
     />
   );
 };

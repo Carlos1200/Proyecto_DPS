@@ -29,9 +29,11 @@ module.exports = () => {
         validarJWT,
         param('id',"El id no es válido").isMongoId(),
         validarCampos
-    ],eliminarPedido)
+    ],eliminarPedido);
 
     router.get('/',validarJWT,obtenerPedidos);
+    
+    router.get('/vendedor',validarJWT,obtenerPedidosVendedor);
 
     return router;
 }

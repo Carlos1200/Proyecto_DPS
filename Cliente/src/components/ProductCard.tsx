@@ -7,26 +7,29 @@ import {
   Dimensions,
   TextInput,
 } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { ThemeContext } from "../context/theme/ThemeContext";
 import { Producto } from "../interfaces";
 
 interface Props {
   producto: Producto;
+  openModal: (productoRef: Producto) => void;
 }
 
-export const ProductCard = ({ producto }: Props) => {
+export const ProductCard = ({ producto, openModal }: Props) => {
   const {
     theme: {
-      colors: { text, background, primary },
-      dark,
+      colors: { primary },
     },
   } = useContext(ThemeContext);
 
-  const { _id, informacion, nombre, year, precio, creador, existencia, foto } =
-    producto;
+  const { nombre, year, precio, foto } = producto;
 
   return (
-    <View style={styles.cardExt}>
+    <TouchableOpacity
+      style={styles.cardExt}
+      activeOpacity={0.8}
+      onPress={() => openModal(producto)}>
       <View style={styles.cardInt}>
         <Image source={{ uri: foto }} style={styles.picture} />
       </View>
@@ -35,7 +38,7 @@ export const ProductCard = ({ producto }: Props) => {
         <Text style={[styles.nombre]}>{year}</Text>
         <Text style={[styles.precio, { color: primary }]}>$ {precio}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

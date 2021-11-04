@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   StatusBar,
   RefreshControl,
+  Button,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -19,6 +20,13 @@ import { ThemeContext } from "../context/theme/ThemeContext";
 import { Producto, ProductosResponse } from "../interfaces";
 import { FlatList } from "react-native-gesture-handler";
 import { CarritoCard } from "../components/CarritoCard";
+import { CartContext } from "../context/cart/CartContext";
+import { Btn } from "../components/Btn";
+
+import { ProductContext } from "../context/product/ProductContext";
+import { AuthContext } from "../context/auth/AuthContext";
+
+
 
 const { width } = Dimensions.get("window");
 
@@ -29,25 +37,36 @@ export const CarritoScreen = () => {
       dark,
     },
   } = useContext(ThemeContext);
+  const {auth:{_id}} = useContext(AuthContext);
+  const { eliminarProducto, reiniciarCarrito, productos, total } =
+    useContext(CartContext); 
 
-  const [productos, setProductos] = useState<Producto[]>();
-  const [refreshing, setRefreshing] = useState(false);
+    const [error, setError] = useState(null);
 
-  const ObtenerProductos = async () => {
-    const { data } = await Api.get<ProductosResponse>("/producto");
-    setProductos(data.productos);
-  };
-
-  const onRefresh = () => {
-    setRefreshing(true);
-
-    ObtenerProductos();
-    setRefreshing(false);
-  };
-
-  useEffect(() => {
-    ObtenerProductos();
-  }, []);
+    const onSubmit = async () => {
+      const arregloproductos = [];
+      productos.forEach(producto=>{
+        arregloproductos.push({
+          producto:producto._id,
+          cantidad:producto.cantidad
+        })
+      })
+      try {
+        const { data } = await Api.post("/pedidos", {
+          productos:arregloproductos,
+          total,
+          creador:_id
+        });
+        console.log(data)
+        reiniciarCarrito();
+      } catch (error) {
+        console.log(error);
+        setError(error.response.data.msg);
+        setTimeout(() => {
+          setError(null);
+        }, 3000);
+      }
+    };
 
   return (
     <SafeAreaView
@@ -73,17 +92,26 @@ export const CarritoScreen = () => {
       </View>
 
       <View style={{ margin: 10 }}>
+      <Text style={[styles.subtitle, { color: text, textAlign: "right", margin: 10}]}>Total de la compra: ${total}</Text>
         <FlatList
           data={productos}
           keyExtractor={(item) => item._id}
-          renderItem={({ item }) => <CarritoCard producto={item} />}
+          renderItem={({ item }) => <CarritoCard producto={item} cantidad={item.cantidad} />}
           //numColumns={width >= 1000 ? 3 : 1}
           showsVerticalScrollIndicator={false}
-          ListFooterComponent={() => <View style={{ marginBottom: 100 }} />}
+          ListFooterComponent={() => <>
+            <Btn
+              title="Crear pedido"
+              onpress={onSubmit}
+            />
+            <View style={{ marginBottom: 300 }}/>
+            </>}
         />
+        
       </View>
     </SafeAreaView>
   );
+
 };
 
 const styles = StyleSheet.create({
