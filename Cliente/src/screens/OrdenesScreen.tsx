@@ -1,27 +1,35 @@
-import React, { useContext,useEffect,useState,useRef } from "react";
-import { Text, View,SafeAreaView,StatusBar,Image,StyleSheet,FlatList,Dimensions,Platform } from "react-native";
+import React, { useContext, useEffect, useState, useRef } from "react";
+import {
+  Text,
+  View,
+  SafeAreaView,
+  StatusBar,
+  Image,
+  StyleSheet,
+  FlatList,
+  Dimensions,
+  Platform,
+} from "react-native";
 import { Portal, PortalHost } from "@gorhom/portal";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { ThemeContext } from "../context/theme/ThemeContext";
-import Modal from '../components/Modal';
-import { Pedido,PedidosResponse } from "../interfaces";
-import {OrderCard} from "../components/OrderCard";
+import Modal from "../components/Modal";
+import { Pedido } from "../interfaces";
+import { OrderCard } from "../components/OrderCard";
 import PedidoDetail from "../components/PedidoDetail";
-import Api from "../api";
+import { OrderContext } from "../context/order/OrderContext";
 
 const { width } = Dimensions.get("window");
 
 export const OrdenesScreen = () => {
   const {
     theme: {
-      colors: { text,background },
-      dark
+      colors: { text, background },
+      dark,
     },
   } = useContext(ThemeContext);
-  const [pedidos, setPedidos] = useState<Pedido[]>();
-  useEffect(()=>{
-    obtenerPedidos();
-  },[]);
+
+  const { pedidos } = useContext(OrderContext);
 
   const [pedido, setPedido] = useState<Pedido>();
 
@@ -31,14 +39,10 @@ export const OrdenesScreen = () => {
     setPedido(pedidoRef);
     bottomSheetRef.current.expand();
   };
-  
-  const obtenerPedidos=async()=>{
-    const {data}=await Api.get<PedidosResponse>('/pedidos');
-    setPedidos(data.pedidos);
-  }
 
   return (
-    <SafeAreaView
+    <>
+      <SafeAreaView
         style={{
           flex: 1,
           marginTop: StatusBar.currentHeight,
@@ -64,7 +68,7 @@ export const OrdenesScreen = () => {
             data={pedidos}
             keyExtractor={(item) => item._id}
             renderItem={({ item }) => (
-              <OrderCard pedido={item} openModal={openModal}/>
+              <OrderCard pedido={item} openModal={openModal} />
             )}
             numColumns={width >= 1000 ? 2 : 1}
             showsVerticalScrollIndicator={false}
@@ -78,7 +82,9 @@ export const OrdenesScreen = () => {
             </Modal>
           </Portal>
         ) : null}
-        </SafeAreaView>
+      </SafeAreaView>
+      <PortalHost name='custom_host' />
+    </>
   );
 };
 

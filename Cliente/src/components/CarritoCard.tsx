@@ -6,10 +6,10 @@ import {
   Text,
   Dimensions,
   TextInput,
+  TouchableOpacity,
 } from "react-native";
-
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { ThemeContext } from "../context/theme/ThemeContext";
+import { Ionicons } from "@expo/vector-icons";
 import { Pedido, Producto } from "../interfaces";
 import { CartContext } from "../context/cart/CartContext";
 
@@ -25,31 +25,41 @@ export const CarritoCard = ({ producto, cantidad }: Props) => {
       dark,
     },
   } = useContext(ThemeContext);
-  
-  const { eliminarProducto, reiniciarCarrito, productos, total } =
-    useContext(CartContext); 
 
-  //const { _id, informacion, nombre, year, precio, creador, existencia, foto } =
-  //  producto;
+  const { eliminarProducto } = useContext(CartContext);
+
   const { _id, informacion, nombre, year, precio, creador, existencia, foto } =
     producto;
 
-
   return (
-    <View style={styles.cardExt}>
-      <View style={styles.cardInt}>
-        <Image source={{ uri: foto }} style={styles.picture} />
+    <>
+      <View style={styles.cardExt}>
+        <View style={styles.cardInt}>
+          <Image source={{ uri: foto }} style={styles.picture} />
+        </View>
+        <View style={styles.centro}>
+          <Text style={[styles.nombre, { color: text }]}>{nombre}</Text>
+          <Text style={[styles.nombre, { color: text }]}>{year}</Text>
+          <Text style={[styles.nombre, { color: text }]}>
+            Agregados: {cantidad}
+          </Text>
+          <Text style={[styles.precio, { color: primary }]}>
+            $ {precio * cantidad}
+          </Text>
+        </View>
+        <TouchableOpacity
+          onPress={() => eliminarProducto(_id)}
+          style={styles.btn}>
+          <Ionicons
+            name='close'
+            color='red'
+            style={{
+              fontSize: 25,
+            }}
+          />
+        </TouchableOpacity>
       </View>
-      <View style={styles.centro}>
-        <Text style={[styles.nombre, { color: text }]}>{nombre}</Text>
-        <Text style={[styles.nombre, { color: text }]}>{year}</Text>
-        <Text style={[styles.nombre, { color: text }]}>Agregados: {cantidad}</Text>
-        <Text style={[styles.precio, { color: primary }]}>$ {precio*cantidad}</Text>
-      </View>
-      <TouchableOpacity onPress={() => eliminarProducto(_id)}>
-        <Text style={[styles.eliminar, { color: primary }]}>X</Text>
-      </TouchableOpacity>
-    </View>
+    </>
   );
 };
 
@@ -63,18 +73,21 @@ const styles = StyleSheet.create({
     padding: 5,
     margin: 5,
     borderRadius: 10,
+    flex: 1,
   },
   cardInt: {
-    backgroundColor: "#5A6978",
+    backgroundColor: "#5a6978",
     padding: 5,
+    marginHorizontal: 5,
     borderRadius: 10,
   },
   centro: {
     width: "60%",
   },
   picture: {
-    height: 70,
-    width: 70,
+    width: 150,
+    height: 150,
+    alignSelf: "center",
     resizeMode: "contain",
   },
   nombre: {
@@ -99,5 +112,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginRight: 5,
     fontWeight: "bold",
+  },
+  btn: {
+    position: "absolute",
+    top: 10,
+    right: 10,
   },
 });
