@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   Image,
   View,
@@ -6,17 +6,23 @@ import {
   Text,
   Dimensions,
   TextInput,
+  Pressable,
 } from "react-native";
 import { ThemeContext } from "../context/theme/ThemeContext";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import { Ionicons } from "@expo/vector-icons";
 import { Pedido } from "../interfaces";
 import { Producto } from "../interfaces"
+import Api from '../api'
+
 
 interface Props {
   pedido: Pedido;
+  //openModal: (pedidoRef: Pedido) => void
 }
 
-export const PedidoReg = ({ pedido }: Props) => {
+export const PedidoReg = ({ pedido/*,openModal*/ }: Props) => {
+  
   const {
     theme: {
       colors: { text, background, primary },
@@ -24,61 +30,97 @@ export const PedidoReg = ({ pedido }: Props) => {
     },
   } = useContext(ThemeContext);
 
-  const { _id, estado, creado, cantidad, total, comprador, producto } =
-    pedido;
+  const [opacity, setOpacity] = useState(1);
+
+  const { _id, estado, creado, cantidad, total, comprador, producto } = pedido;
+  
+  const eliminarPedido = async() =>{
+    try{
+      if(estado === 'Completado'){
+        await Api.delete(`/pedidos/${_id}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
-    <View style={styles.cardExt}>      
-      <View style={styles.centro}>
-        <Text style={[styles.nombre, { color: text }]}>{_id}</Text>
-        <Text style={[styles.nombre, { color: text }]}>{estado}</Text>
-        <Text style={[styles.precio, { color: primary }]}>$ {total}</Text>
-        <FlatList
-          data={producto}
-          keyExtractor={(item) => item._id}
-          renderItem={({ item }) => <Text style={[styles.precio, { color: text }]} >{item.nombre}: ${item.precio}</Text>}          
-          showsVerticalScrollIndicator={false}          
-        />
-      </View>      
-    </View>
+    <Pressable
+      style={[styles.contenedor,{opacity}]}
+      //onLongPress={()=>openModal(pedido)}
+      onPressIn={() => setOpacity(0.8)}
+      onPressOut={() => setOpacity(1)}
+    >
+      {pedido.producto[0]?(
+        <>
+          <Image
+            source={{uri:pedido.producto[0].foto}}
+            style={styles.img}
+          />
+          <View style={[styles.contenedorinfo, {paddingBottom:30}]}>
+            <Text style={styles.title}>{pedido.producto[0].nombre}</Text>
+            <Text style={styles.label}>Cantidad: {cantidad}</Text>
+            <Text style={[styles.label,{color:estado==="Pendiente"?"red":"green"}]}>Estado: {estado}</Text>
+          </View>
+          <Text style={[styles.price, {color:primary}]}>$ {pedido.producto[0].precio}</Text>
+          <TouchableOpacity>
+            <Ionicons name='close' color='red' style={styles.btn} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btnComplete}>
+            <Text>Completado</Text>
+          </TouchableOpacity>
+        </>
+      ):null}
+
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
-  cardExt: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#343F4B",
-    padding: 5,
-    margin: 5,
-    borderRadius: 10,
+  contenedor:{
+    backgroundColor: '#fff',
+    marginVertical: 10,
+    marginHorizontal: 25,
+    borderRadius: 20,
+    flexDirection: 'row'
   },
-  cardInt: {
-    backgroundColor: "#5A6978",
-    padding: 5,
-    borderRadius: 10,
+  img:{
+    width: 110,
+    height: 110,
+    margin: 20,
+    alignSelf: 'center',
+    resizeMode: 'contain',
   },
-  centro: {
-    width:'60%'
+  contenedorinfo:{
+    marginVertical: 15,
+    width: '100%',
   },
-  picture: {
-    height: 70,
-    width: 70,
-    resizeMode: "contain",
-  },
-  nombre: {
-    textAlign: "left",
-    fontSize: 16,
-    marginTop: 5,
-    marginLeft: 10,
-  },
-  precio: {
-    textAlign: "right",
+  title:{
     fontSize: 20,
-    marginRight: 30,
-    marginBottom:10,
-    fontWeight: "bold",
-  }  
+    fontWeight: 'bold',
+    marginTop: 7,
+  },
+  label:{
+    fontSize: 20,
+    marginTop: 7,
+  },
+  price:{
+    position: 'absolute',
+    bottom: 6,
+    right: 15,
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  btn:{
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    fontSize: 25,
+  },
+  btnComplete:{
+    borderRadius: 20,
+    backgroundColor: 'green',
+    paddingVertical:50,
+    paddingHorizontal:50,
+  }
 });

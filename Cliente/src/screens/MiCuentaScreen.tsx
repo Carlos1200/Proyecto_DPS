@@ -228,10 +228,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
     marginBottom: 20,
-<<<<<<< HEAD
-=======
     top: "50%",
->>>>>>> main
   },
   image: {
     width: 170,
@@ -243,11 +240,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 20,
     paddingHorizontal: 10,
-<<<<<<< HEAD
-    paddingLeft:15,
-=======
     paddingLeft: 15,
->>>>>>> main
     fontSize: 16,
   },
   label: {
@@ -262,19 +255,6 @@ const styles = StyleSheet.create({
     borderLeftColor: "red",
     paddingLeft: 5,
   },
-<<<<<<< HEAD
-  buttonBox:{
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  button:{
-    paddingVertical: 10,
-    textAlign: 'center',
-    width: '40%',
-    alignSelf:'center',
-  }
-})
-=======
   buttonBox: {
     display: "flex",
     flexDirection: "column",
@@ -287,4 +267,3 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
 });
->>>>>>> main

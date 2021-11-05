@@ -5,7 +5,8 @@ import {
   StyleSheet,  
   Dimensions,
   SafeAreaView,
-  StatusBar,  
+  StatusBar, 
+  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Api from "../api";
@@ -13,13 +14,14 @@ import { ThemeContext } from "../context/theme/ThemeContext";
 import { PedidosResponse, Pedido } from "../interfaces";
 import { FlatList } from "react-native-gesture-handler";
 import { PedidoReg } from "../components/PedidoReg";
+import { darkTheme } from "../context/theme/ThemeReducer";
 
 const { width } = Dimensions.get("window");
 
 export const MisPedidosScreen = () => {
   const {
     theme: {
-      colors: { text },
+      colors: { text, primary, background }, dark,
     },
   } = useContext(ThemeContext);
 
@@ -67,7 +69,15 @@ export const MisPedidosScreen = () => {
           <Text style={[styles.subtitle, { color: text, textAlign: "center" }]}>
             Mis Pedidos
           </Text>
-        </View>        
+        </View>
+        <Image
+          style={[styles.logo, {backgroundColor: background}]}
+          source ={
+            dark
+              ? require("../assets/logoOscuro.png")
+              :require("../assets/logoClaro.png")
+          }
+        />        
       </View>
       <View style={{ margin: 10 }}>
         <FlatList

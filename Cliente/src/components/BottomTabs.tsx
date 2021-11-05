@@ -6,9 +6,11 @@ import {
   Dimensions,
   Text,
   TouchableOpacity,
-  Keyboard
-} from 'react-native'
+  Keyboard,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { ThemeContext } from "../context/theme/ThemeContext";
+const { width } = Dimensions.get("window");
 
 export const BottomTabs = ({ navigation }: BottomTabBarProps) => {
   const {
