@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { HomeScreen } from "../screens/HomeScreen";
 import { CarritoScreen } from "../screens/CarritoScreen";
