@@ -34,5 +34,5 @@ Este proyecto tiene un propósito enteramente académico, trabajado para la mate
 - **Link Video Demostrativo de Funcionalidad:** [Link](https://drive.google.com/file/d/1OCc_etTsIA8TRJRz_fdE7WRj34v15L5U/view?usp=sharing)
 - **Link Documentación API:** [Link](https://documenter.getpostman.com/view/13313932/TzzEmtwz)
 - **Link Documento PDF:** [Link](https://docs.google.com/document/d/1OVqtw6rUYAy1D7VA1iC7TNK9x9op055V/edit?usp=sharing&ouid=107684904107417675018&rtpof=true&sd=true)
-- **Link Manual Técnico:** [Link](https://drive.google.com/file/d/1lgZCpQY82weSih2K1_iHVMZdKkJ5S8ii/view?usp=sharing)
-- **Link Manual de Usuario:** [Link](https://drive.google.com/file/d/1pfCVLiaStxDJ9XNx6o2vEqohKH5n-GIf/view?usp=sharing)
+- **Link Manual Técnico:** [Link](https://drive.google.com/file/d/1a7lMjOMvhdma8nUQBz1DBDagZiriH9eZ/view?usp=sharing)
+- **Link Manual de Usuario:** [Link](https://drive.google.com/file/d/1insibfo9xYciPV6MBk8MRGlef7pHeifG/view?usp=sharing)
