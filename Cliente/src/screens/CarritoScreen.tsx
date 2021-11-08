@@ -1,28 +1,23 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Text,
   View,
   StyleSheet,
   Image,
-  TextInput,
   Dimensions,
   SafeAreaView,
   StatusBar,
-  RefreshControl,
-  Button,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 
 import Api from "../api";
-import { Input } from "../components/Input";
 
 import { ThemeContext } from "../context/theme/ThemeContext";
-import { Producto, ProductosResponse } from "../interfaces";
 import { FlatList } from "react-native-gesture-handler";
 import { CarritoCard } from "../components/CarritoCard";
 import { CartContext } from "../context/cart/CartContext";
 import { Btn } from "../components/Btn";
 import { AuthContext } from "../context/auth/AuthContext";
+import { OrderContext } from "../context/order/OrderContext";
 
 const { width } = Dimensions.get("window");
 
@@ -37,6 +32,7 @@ export const CarritoScreen = () => {
     auth: { _id },
   } = useContext(AuthContext);
   const { reiniciarCarrito, productos, total } = useContext(CartContext);
+  const { obtenerTodosPedidos } = useContext(OrderContext);
 
   const [error, setError] = useState(null);
 
@@ -54,8 +50,8 @@ export const CarritoScreen = () => {
         total,
         creador: _id,
       });
-      console.log(data);
       reiniciarCarrito();
+      obtenerTodosPedidos();
     } catch (error) {
       console.log(error);
       setError(error.response.data.msg);

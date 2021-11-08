@@ -8,6 +8,7 @@ interface OrderContextProps {
   misPedidos: Pedido[];
   eliminarPedido: (id: string) => Promise<void>;
   actualizarEstado: (id: string, estado: string) => Promise<void>;
+  obtenerTodosPedidos: () => void;
 }
 
 export const OrderContext = createContext({} as OrderContextProps);
@@ -52,6 +53,11 @@ export const OrderProvider = ({ children }) => {
     }
   };
 
+  const obtenerTodosPedidos = () => {
+    obtenerPedidos();
+    obtenerMisPedidos();
+  };
+
   const eliminarPedido = async (id: string) => {
     try {
       await Api.delete(`/pedidos/${id}`);
@@ -80,6 +86,7 @@ export const OrderProvider = ({ children }) => {
         misPedidos: state.misPedidos,
         eliminarPedido,
         actualizarEstado,
+        obtenerTodosPedidos,
       }}>
       {children}
     </OrderContext.Provider>

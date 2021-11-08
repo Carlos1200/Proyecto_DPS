@@ -9,6 +9,14 @@
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/logoOscuro.png",
         "backgroundColor": "#232A32"
+      },
+      "package": "com.udb.twistwine",
+      "config":{
+        "googleSignIn":{
+          "apiKey":"AIzaSyCsfCGWRPLQqOa4gFGgyBeqCEeeZRwOOwU",
+          "certificateHash":"7B3B5A4197389BA56542B7595A5A3F5CF8BF5180"
+
+        }
       }
     },
     "web": {

@@ -13,13 +13,13 @@ const AppState = ({ children }: any) => {
   return (
     <AuthProvider>
       <ProductProvider>
-        <CartProvider>
-          <OrderProvider>
+        <OrderProvider>
+          <CartProvider>
             <ThemeProvider>
               <PortalProvider>{children}</PortalProvider>
             </ThemeProvider>
-          </OrderProvider>
-        </CartProvider>
+          </CartProvider>
+        </OrderProvider>
       </ProductProvider>
     </AuthProvider>
   );

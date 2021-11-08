@@ -48,7 +48,9 @@ export const CarritoCard = ({ producto, cantidad }: Props) => {
           </Text>
         </View>
         <TouchableOpacity
-          onPress={() => eliminarProducto(_id)}
+          onPress={() => {
+            eliminarProducto(_id);
+          }}
           style={styles.btn}>
           <Ionicons
             name='close'
