@@ -140,7 +140,6 @@ export const NuevoProductoScreen = ({ navigation, route }: Props) => {
           const { data } = await Api.post("/upload", formData);
           resp = data;
         }
-
         setValue("foto", resp.foto);
         setImage(resp.foto);
       } catch (error) {

@@ -11,7 +11,7 @@ subirImagen = async (req, res, next) => {
     const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
     const url = secure_url;
 
-    res.json({ url });
+    res.json({ foto:url });
   } catch (error) {
     res.json({ msg: "No se pudo subir la imagen del producto" });
     next();

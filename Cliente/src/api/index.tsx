@@ -1,7 +1,8 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const baseURL = "https://twist-wine.herokuapp.com/api";
+const baseURL = "http://192.168.0.106:4000/api";
+// const baseURL = "https://twist-wine.herokuapp.com/api";
 
 const Api = axios.create({
   baseURL,
